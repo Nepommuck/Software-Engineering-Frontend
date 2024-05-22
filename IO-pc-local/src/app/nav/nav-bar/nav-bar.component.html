@@ -1,0 +1,9 @@
+<header>
+  @for (entry of entries; track $index) {
+    @if (selectedIndex == $index) {
+      <button mat-raised-button [routerLink]="entry.routerLink"> {{ entry.name }}</button>
+    } @else {
+      <button mat-button [routerLink]="entry.routerLink"> {{ entry.name }}</button>
+    }
+  }
+</header>

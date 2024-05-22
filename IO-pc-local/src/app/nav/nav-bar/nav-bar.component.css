@@ -1,0 +1,9 @@
+header {
+  display: flex;
+  gap: 20px;
+}
+
+/* Makes selected buttons as wide as the unselected ones */
+button[mat-button] {
+  margin: 0 8px;
+}

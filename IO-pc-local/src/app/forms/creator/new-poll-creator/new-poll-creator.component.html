@@ -1,0 +1,24 @@
+<h4>Obecna ankieta ({{ fieldsNumberMessage }}):</h4>
+
+<div class="existing-questions">
+  @for (field of currentForm; track $index) {
+    <p> {{ $index + ". " + field.question }} </p>
+
+    <div>
+      <button mat-icon-button (click)="moveFieldUp(field.id)" [disabled]="$index === 0">
+        <mat-icon>arrow_upward</mat-icon>
+      </button>
+      <button mat-icon-button (click)="moveFieldDown(field.id)" [disabled]="$index === currentForm.length - 1">
+        <mat-icon>arrow_downward</mat-icon>
+      </button>
+      <button mat-icon-button (click)="removeField(field.id)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  }
+</div>
+
+<h4>Dodaj nowe pole do formularza</h4>
+
+<input [(ngModel)]="mewQuestionInputValue" type="text">
+<button (click)="addField()" mat-button>Dodaj</button>
