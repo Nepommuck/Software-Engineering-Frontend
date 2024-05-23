@@ -1,7 +1,8 @@
 <div class="register">
     <form *ngIf="!isRegistered; else waiting_screen" #userForm="ngForm" class="register__form">
         <input name="name" [(ngModel)]="model.name" type="text" minlength="4" required class="register__input" placeholder="Podaj swoje imię i nazwisko"/>
-        <button [disabled]="!userForm.valid" (click)="onSubmitBtnClick()" class="register__button"> Dołącz </button>
+        <!-- <button [disabled]="!userForm.valid" (click)="submitForm()" class="register__button"> Dołącz </button> -->
+        <button [disabled]="!userForm.valid" (click)="submitForm()" mat-button class="register__button"> Dołącz </button>
     </form>
     
     <ng-template #waiting_screen>

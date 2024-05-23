@@ -2,19 +2,22 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { LobbyEvent, LobbyEventStatus } from './model';
+
+import {MatButton} from "@angular/material/button";
 
 
 import { RegisterService } from './register.service';
-
-interface IStudent {
-  id?: number;
-  name: string;
-}
+import { IStudent } from './model';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [NgIf, FormsModule],
+  imports: [
+    NgIf,
+    FormsModule,
+    MatButton
+  ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
@@ -26,10 +29,39 @@ export class RegisterComponent {
 
   constructor(private router: Router, private registerService: RegisterService) {}
 
-  onSubmitBtnClick() {
-    //TODO: subscribe to some value passed from registerService,
-    //which will give us info, if session has began, if we need to wait, or if the user has been kicked from lobby  
-    this.isRegistered = this.registerService.register(this.model.name);
-    //...
+  ngOnInit() {
+    //FIXME: subscription should be cancel when on unmount/redirection! 
+
+    this.registerService.status.subscribe(event => {
+      switch (event.status) {
+        case LobbyEventStatus.SUCCESS:
+          this.isRegistered = true;
+          break;
+        case LobbyEventStatus.SESSION_STARTED:
+          //TODO: REDIRECT TO NEXT PHASE
+          break;
+        case LobbyEventStatus.FAILED:
+          this.isRegistered = false;
+          this.displayErrorMesage("Nie udało się dołączyć do sesji.");
+          break;
+        case LobbyEventStatus.DUPLICATE_USER:
+          this.displayErrorMesage("Użytkownik o podanej nazwie już istnieje!");
+          break;
+        case LobbyEventStatus.USER_KICKED:
+          this.displayErrorMesage("Zostałeś usunięty z pokoju, spróbuj połączyć się ponownie");
+          break;
+        case LobbyEventStatus.UNKNOWN_ERROR:
+          this.displayErrorMesage("Wystąpił nieznany błąd.");
+          break;
+      }
+    })
+  }
+
+  submitForm() {
+    this.registerService.register(this.model.name);
+  }
+
+  displayErrorMesage(msg: string) {
+    alert(msg);
   }
 }
