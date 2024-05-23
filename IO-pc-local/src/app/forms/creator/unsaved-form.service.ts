@@ -33,13 +33,12 @@ export class UnsavedFormService {
     const secondFieldIndex = fieldIndex + (direction === "down" ? 1 : -1)
 
     // Operation out of scope
-    if (secondFieldIndex < 0 || secondFieldIndex >= this.currentForm.length)
+    if (secondFieldIndex < 0 || secondFieldIndex >= this.currentForm.length) {
       return false
+    }
 
-    console.log(fieldIndex, secondFieldIndex)
-    const fieldToSwap = this.currentForm[fieldIndex]
-    this.currentForm[fieldIndex] = this.currentForm[secondFieldIndex]
-    this.currentForm[secondFieldIndex] = fieldToSwap
+    [this.currentForm[fieldIndex], this.currentForm[secondFieldIndex]] =
+      [this.currentForm[secondFieldIndex], this.currentForm[fieldIndex]]
 
     return true
   }
