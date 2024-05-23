@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {FormField, FormFieldId, FormType} from "../model";
+import {Observable, Subject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -8,18 +9,27 @@ export class UnsavedFormService {
   private firstFreeFieldId = 0
   private currentForm: FormType = []
 
+  private formChanges: Subject<FormType> = new Subject<FormType>();
+
   get form(): FormType {
     return [...this.currentForm]
+  }
+
+  get formChanges$(): Observable<FormType> {
+    return this.formChanges.asObservable();
   }
 
   addField(question: string): void {
     const newField: FormField = {id: this.firstFreeFieldId, question}
     this.firstFreeFieldId++
     this.currentForm.push(newField)
+
+    this.emitChange()
   }
 
   removeField(id: FormFieldId): void {
     this.currentForm = this.currentForm.filter(field => field.id !== id)
+    this.emitChange()
   }
 
   // Returns `true` if operation was successful, `false` otherwise
@@ -39,7 +49,12 @@ export class UnsavedFormService {
 
     [this.currentForm[fieldIndex], this.currentForm[secondFieldIndex]] =
       [this.currentForm[secondFieldIndex], this.currentForm[fieldIndex]]
+    this.emitChange()
 
     return true
+  }
+
+  private emitChange(): void {
+    this.formChanges.next([...this.currentForm]);
   }
 }

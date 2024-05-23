@@ -27,6 +27,12 @@ export class NewPollCreatorComponent implements OnInit {
 
   ngOnInit(): void {
     this.updateFieldsNumberMessage()
+
+    this.unsavedFormService.formChanges$.subscribe(updatedForm => {
+        this.currentForm = updatedForm
+        this.updateFieldsNumberMessage()
+      }
+    )
   }
 
   protected addField(): void {
@@ -35,28 +41,19 @@ export class NewPollCreatorComponent implements OnInit {
     if (validationResult !== null) {
       this.unsavedFormService.addField(validationResult)
       this.newQuestionInputValue = ""
-      this.updateForm()
     }
   }
 
   protected removeField(fieldId: FormFieldId): void {
     this.unsavedFormService.removeField(fieldId)
-    this.updateForm()
   }
 
   protected moveFieldUp(fieldId: FormFieldId): void {
     this.unsavedFormService.changeFieldOrder(fieldId, "up")
-    this.updateForm()
   }
 
   protected moveFieldDown(fieldId: FormFieldId): void {
     this.unsavedFormService.changeFieldOrder(fieldId, "down")
-    this.updateForm()
-  }
-
-  private updateForm() {
-    this.currentForm = this.unsavedFormService.form
-    this.updateFieldsNumberMessage()
   }
 
   private updateFieldsNumberMessage(): void {
