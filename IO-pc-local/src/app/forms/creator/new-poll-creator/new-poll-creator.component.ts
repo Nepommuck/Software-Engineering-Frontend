@@ -4,6 +4,7 @@ import {FormsModule} from "@angular/forms";
 import {FormFieldId, FormType} from "../../model";
 import {MatIcon} from "@angular/material/icon";
 import {MatButton, MatIconButton} from "@angular/material/button";
+import {MatFormField} from "@angular/material/form-field";
 
 @Component({
   selector: 'app-new-poll-creator',
@@ -12,7 +13,8 @@ import {MatButton, MatIconButton} from "@angular/material/button";
     FormsModule,
     MatIcon,
     MatIconButton,
-    MatButton
+    MatButton,
+    MatFormField
   ],
   templateUrl: './new-poll-creator.component.html',
   styleUrl: './new-poll-creator.component.css'
@@ -68,7 +70,8 @@ export class NewPollCreatorComponent implements OnInit {
       return "pytań"
     }
 
-    this.fieldsNumberMessage = `w sumie ${this.currentForm.length} ${getQuestionKeyword(this.currentForm.length)}`
+    this.fieldsNumberMessage =
+      `w sumie ${this.currentForm.fields.length} ${getQuestionKeyword(this.currentForm.fields.length)}`
   }
 
   private validateFormInput(): string | null {

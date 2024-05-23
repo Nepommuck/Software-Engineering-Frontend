@@ -5,4 +5,11 @@ export interface FormField {
   readonly question: string
 }
 
-export type FormType = FormField[]
+export interface FormType {
+  readonly name: string
+  readonly fields: FormField[]
+}
+
+export type SavedFormType = FormType & {
+  readonly id: number
+}

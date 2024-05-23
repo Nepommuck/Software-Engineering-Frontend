@@ -1,0 +1,13 @@
+<h4>Liczba zapisanych ankiet: {{ savedForms.length }} </h4>
+
+<div>
+  @for (form of savedForms; track $index) {
+    <div>
+      <p> {{ $index + ". " + form.name }} </p>
+
+      <button mat-button>
+        Wejdź
+      </button>
+    </div>
+  }
+</div>
