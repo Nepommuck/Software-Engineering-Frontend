@@ -21,7 +21,7 @@ export class NewPollCreatorComponent implements OnInit {
   readonly unsavedFormService = inject(UnsavedFormService)
 
   protected currentForm: FormType = this.unsavedFormService.form
-  protected mewQuestionInputValue: string = ""
+  protected newQuestionInputValue: string = ""
 
   protected fieldsNumberMessage: string = ""
 
@@ -34,7 +34,7 @@ export class NewPollCreatorComponent implements OnInit {
 
     if (validationResult !== null) {
       this.unsavedFormService.addField(validationResult)
-      this.mewQuestionInputValue = ""
+      this.newQuestionInputValue = ""
       this.updateForm()
     }
   }
@@ -61,9 +61,9 @@ export class NewPollCreatorComponent implements OnInit {
 
   private updateFieldsNumberMessage(): void {
     function getQuestionKeyword(fieldsNumber: number): string {
-      if (fieldsNumber == 1)
+      if (fieldsNumber === 1)
         return "pytanie"
-      if ((fieldsNumber < 10 || fieldsNumber > 20) && [2, 3].includes(fieldsNumber % 10))
+      if ((fieldsNumber < 10 || fieldsNumber > 20) && [2, 3, 4].includes(fieldsNumber % 10))
         return "pytania"
       return "pytań"
     }
@@ -72,7 +72,7 @@ export class NewPollCreatorComponent implements OnInit {
   }
 
   private validateFormInput(): string | null {
-    const trimmed = this.mewQuestionInputValue.trim()
+    const trimmed = this.newQuestionInputValue.trim()
 
     if (trimmed === "")
       return null

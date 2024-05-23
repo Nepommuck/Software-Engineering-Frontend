@@ -6,13 +6,7 @@ import {FormField, FormFieldId, FormType} from "../model";
 })
 export class UnsavedFormService {
   private firstFreeFieldId = 0
-  private currentForm: FormType = [
-    {id: -5, question: "Kim ty w ogóle jesteś człowieku?"},
-    {id: -4, question: "Dumny ty z siebie jesteś człowieku?"},
-    {id: -3, question: "Wiesz kogo ty obrażasz?"},
-  ]
-
-  // private currentForm: FormType = []
+  private currentForm: FormType = []
 
   get form(): FormType {
     return [...this.currentForm]
@@ -30,13 +24,13 @@ export class UnsavedFormService {
 
   // Returns `true` if operation was successful, `false` otherwise
   changeFieldOrder(fieldId: FormFieldId, direction: "up" | "down"): boolean {
-    const fieldIndex = this.currentForm.findIndex(field => field.id == fieldId)
+    const fieldIndex = this.currentForm.findIndex(field => field.id === fieldId)
 
     // Field does not exist
     if (fieldIndex < 0)
       return false
 
-    const secondFieldIndex = fieldIndex + (direction == "down" ? 1 : -1)
+    const secondFieldIndex = fieldIndex + (direction === "down" ? 1 : -1)
 
     // Operation out of scope
     if (secondFieldIndex < 0 || secondFieldIndex >= this.currentForm.length)
