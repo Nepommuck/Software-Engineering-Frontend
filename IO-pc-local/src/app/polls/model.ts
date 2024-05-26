@@ -1,3 +1,4 @@
+export type FormId = number
 export type FormFieldId = number
 
 export interface FormField {

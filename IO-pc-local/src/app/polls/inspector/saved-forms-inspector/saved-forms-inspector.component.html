@@ -1,0 +1,17 @@
+<h4>Liczba zapisanych ankiet: {{ savedForms.length }} </h4>
+
+<div class="forms">
+  @for (form of savedForms; track $index) {
+    <p> {{ ($index + 1) + ". " + form.name }} </p>
+
+    <button mat-icon-button [routerLink]="'' + form.id" matTooltip="Zobacz ankietę">
+      <mat-icon>zoom_in</mat-icon>
+    </button>
+    <button mat-icon-button [routerLink]="'edit/' + form.id" matTooltip="Edytuj">
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button mat-icon-button (click)="removeForm(form.id)" matTooltip="Usuń ankietę">
+      <mat-icon>delete</mat-icon>
+    </button>
+  }
+</div>

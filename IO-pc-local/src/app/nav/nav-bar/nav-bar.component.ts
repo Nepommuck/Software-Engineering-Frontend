@@ -10,7 +10,7 @@ interface NavBarEntry {
 
 const NavBarEntries: NavBarEntry[] = [
   {name: "Strona główna", routerLink: RoutePaths.Home},
-  {name: "Wybierz ankietę", routerLink: RoutePaths.Forms.Inspect},
+  {name: "Wybierz ankietę", routerLink: RoutePaths.Forms.All},
   {name: "Stwórz ankietę", routerLink: RoutePaths.Forms.New},
 ]
 

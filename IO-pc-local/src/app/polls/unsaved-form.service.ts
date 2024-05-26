@@ -1,15 +1,17 @@
 import {Injectable} from '@angular/core';
-import {FormField, FormFieldId, FormType} from "../model";
+import {FormField, FormFieldId, FormType} from "./model";
 import {Observable, Subject} from "rxjs";
+
+const EmptyForm: FormType = {name: "", fields: []}
 
 @Injectable({
   providedIn: 'root'
 })
 export class UnsavedFormService {
   private firstFreeFieldId = 0
-  private currentForm: FormType = {name: "", fields: []}
+  private currentForm: FormType = EmptyForm
 
-  private formChanges: Subject<FormType> = new Subject<FormType>();
+  private formChanges = new Subject<FormType>();
 
   get form(): FormType {
     return {...this.currentForm}
@@ -55,6 +57,16 @@ export class UnsavedFormService {
     this.emitChange()
 
     return true
+  }
+
+  load(form: FormType): void {
+    this.currentForm = form
+    this.emitChange()
+  }
+
+  restart(): void {
+    this.currentForm = EmptyForm
+    this.emitChange()
   }
 
   private emitChange(): void {

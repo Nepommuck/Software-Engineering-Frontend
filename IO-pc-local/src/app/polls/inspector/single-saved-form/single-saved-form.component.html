@@ -1,0 +1,11 @@
+@if (form) {
+  <h4> {{ form.name }} </h4>
+
+  <div>
+    @for (field of form.fields; track $index) {
+      <p> {{ ($index + 1) + ". " + field.question }} </p>
+    }
+  </div>
+
+  <button mat-button routerLink="..">Wróć</button>
+}

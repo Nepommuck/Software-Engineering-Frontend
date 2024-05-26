@@ -1,0 +1,5 @@
+div.forms {
+  display: grid;
+  grid-template-columns: 6fr 1fr 1fr 1fr;
+  align-items: end;
+}

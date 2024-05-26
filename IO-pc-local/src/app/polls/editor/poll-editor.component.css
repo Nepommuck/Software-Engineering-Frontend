@@ -5,3 +5,9 @@ div.existing-questions {
 
   margin-bottom: 30px;
 }
+
+div.bottom-buttons {
+  margin-top: 40px;
+  display: flex;
+  justify-content: space-between;
+}
