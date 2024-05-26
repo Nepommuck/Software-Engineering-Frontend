@@ -3,9 +3,12 @@ import { Router } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LobbyEvent, LobbyEventStatus } from './model';
+import { ChangeDetectorRef } from '@angular/core';
 
 import {MatButton} from "@angular/material/button";
+
 import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 import { RegisterService } from './register.service';
 import { IStudent } from './model';
@@ -16,7 +19,7 @@ import { IStudent } from './model';
   imports: [
     NgIf,
     FormsModule,
-    MatButton, MatInputModule
+    MatButton, MatFormFieldModule, MatInputModule
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
@@ -27,13 +30,17 @@ export class RegisterComponent {
     name: ""
   };
 
-  constructor(private router: Router, private registerService: RegisterService) {}
+  constructor(
+    private router: Router,
+    private changeDetector: ChangeDetectorRef,
+    private registerService: RegisterService
+  ) {
+  }
 
   ngOnInit() {
-    //FIXME: subscription should be canceled when on unmount/redirection! 
-
-    this.registerService.status.subscribe(event => {
-      switch (event.status) {
+    this.registerService.status.subscribe(msg => {
+      console.log("subscribe triggered");
+      switch (msg.status) {
         case LobbyEventStatus.SUCCESS:
           this.isRegistered = true;
           break;
@@ -54,7 +61,9 @@ export class RegisterComponent {
           this.displayErrorMesage("Wystąpił nieznany błąd.");
           break;
       }
-    })
+      this.changeDetector.detectChanges();  // hack (?) allowing to detect changes of this.isRegistered and update the component;
+                                            // for some reason the view doesn't update without it  
+    });
   }
 
   ngOnDestroy() {
@@ -62,6 +71,8 @@ export class RegisterComponent {
   }
 
   submitForm() {
+    
+
     this.registerService.register(this.model.name);
   }
 

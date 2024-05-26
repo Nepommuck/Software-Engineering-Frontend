@@ -1,13 +1,14 @@
 <div class="register">
-    <form *ngIf="!isRegistered; else waiting_screen" #userForm="ngForm" class="register__form">
-        <mat-form-field class="example-full-width">
+    <form *ngIf="!isRegistered; else waiting_screen" #userForm="ngForm" class="register__form" (submit)="submitForm()">
+        <mat-form-field appearance="outline">
             <mat-label>Podaj swoje imię i nazwisko</mat-label>
             <input matInput name="name" [(ngModel)]="model.name" type="text" minlength="4" required class="register__input" placeholder="Jan Kowalski"/>
         </mat-form-field>
-        <button [disabled]="!userForm.valid" (click)="submitForm()" mat-button class="register__button"> Dołącz </button>
+        <!-- <button [disabled]="!userForm.valid" (click)="submitForm()" mat-button class="register__button"> Dołącz </button> -->
+        <button [disabled]="!userForm.valid" mat-button class="register__button"> Dołącz </button>
    </form>
-    
-    <ng-template #waiting_screen>
-        <p> Oczekiwanie na rozpoczęcie sesji...</p>
-    </ng-template>
+
+   <ng-template #waiting_screen>
+        Oczekiwanie na rozpoczęcie sesji...
+   </ng-template>
 </div>
