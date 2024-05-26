@@ -10,6 +10,7 @@ interface NavBarEntry {
 const NavBarEntries: NavBarEntry[] = [
   {name: "Strona główna", routerLink: ""},
   {name: "Stwórz formularz", routerLink: "create"},
+  {name: "Rozpocznij sesję", routerLink: "lobby"}
 ]
 
 @Component({
