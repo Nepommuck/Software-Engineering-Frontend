@@ -1,16 +1,16 @@
-export type FormId = number
-export type FormFieldId = number
+export type PollId = number
+export type PollFieldId = number
 
-export interface FormField {
-  readonly id: FormFieldId
+export interface PollField {
+  readonly id: PollFieldId
   readonly question: string
 }
 
-export interface FormType {
+export interface Poll {
   readonly name: string
-  readonly fields: FormField[]
+  readonly fields: PollField[]
 }
 
-export type SavedFormType = FormType & {
+export type SavedPoll = Poll & {
   readonly id: number
 }

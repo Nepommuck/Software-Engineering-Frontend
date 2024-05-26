@@ -1,14 +1,14 @@
 import {Component, inject, input, OnInit} from '@angular/core';
 import {FormsModule} from "@angular/forms";
-import {FormFieldId, FormType, SavedFormType} from "../model";
+import {PollFieldId, SavedPoll} from "../model";
 import {MatIcon} from "@angular/material/icon";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatFormField} from "@angular/material/form-field";
 import {MatRow} from "@angular/material/table";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router, RouterLink} from "@angular/router";
-import {SavedFormsService} from "../saved-forms.service";
-import {UnsavedFormService} from "../unsaved-form.service";
+import {SavedPollsService} from "../saved-polls.service";
+import {UnsavedPollService} from "../unsaved-poll.service";
 import {MatTooltip} from "@angular/material/tooltip";
 
 @Component({
@@ -28,79 +28,83 @@ import {MatTooltip} from "@angular/material/tooltip";
   styleUrl: './poll-editor.component.css'
 })
 export class PollEditorComponent implements OnInit {
-  formToEdit = input<SavedFormType>()
-  protected newQuestionInputValue: string = ""
-  protected fieldsNumberMessage = ""
-  protected newFormName = ""
-  private readonly unsavedFormService = inject(UnsavedFormService)
-  protected currentForm: FormType = this.unsavedFormService.form
-  private readonly savedFormsService = inject(SavedFormsService)
+  private readonly unsavedPollService = inject(UnsavedPollService)
+  private readonly savedPollsService = inject(SavedPollsService)
   private readonly router = inject(Router)
   private readonly snackBar = inject(MatSnackBar)
 
+  pollToEdit = input<SavedPoll>()
+
+  protected newQuestionInputValue: string = ""
+  protected fieldsNumberMessage = ""
+  protected newPollName = ""
+  protected currentPoll = this.unsavedPollService.poll
+
   ngOnInit(): void {
-    const formToEdit = this.formToEdit()
-    if (formToEdit) {
-      this.unsavedFormService.load(formToEdit)
-      this.newFormName = formToEdit.name
-      this.currentForm = formToEdit
+    const pollToEdit = this.pollToEdit()
+    if (pollToEdit) {
+      this.unsavedPollService.load(pollToEdit)
+      this.newPollName = pollToEdit.name
+      this.currentPoll = pollToEdit
     }
 
     this.updateFieldsNumberMessage()
 
-    this.unsavedFormService.formChanges$.subscribe(updatedForm => {
-        this.currentForm = updatedForm
+    this.unsavedPollService.pollChanges$.subscribe(updatedPoll => {
+        this.currentPoll = updatedPoll
         this.updateFieldsNumberMessage()
       }
     )
   }
 
   protected addField(): void {
-    const validationResult = this.validateFormInput()
+    const validationResult = this.validatePollInput()
 
     if (validationResult !== null) {
-      this.unsavedFormService.addField(validationResult)
+      this.unsavedPollService.addField(validationResult)
       this.newQuestionInputValue = ""
     }
   }
 
-  protected removeField(fieldId: FormFieldId): void {
-    this.unsavedFormService.removeField(fieldId)
+  protected removeField(fieldId: PollFieldId): void {
+    this.unsavedPollService.removeField(fieldId)
   }
 
-  protected moveFieldUp(fieldId: FormFieldId): void {
-    this.unsavedFormService.changeFieldOrder(fieldId, "up")
+  protected moveFieldUp(fieldId: PollFieldId): void {
+    this.unsavedPollService.changeFieldOrder(fieldId, "up")
   }
 
-  protected moveFieldDown(fieldId: FormFieldId): void {
-    this.unsavedFormService.changeFieldOrder(fieldId, "down")
+  protected moveFieldDown(fieldId: PollFieldId): void {
+    this.unsavedPollService.changeFieldOrder(fieldId, "down")
   }
 
-  protected saveFormHandler(): void {
-    this.currentForm = {
-      ...this.currentForm,
-      name: this.newFormName,
+  protected savePollHandler(): void {
+    this.currentPoll = {
+      ...this.currentPoll,
+      name: this.newPollName,
     }
+    const validationResult = this.validateWholePoll()
 
-    const validationResult = this.validateWholeForm()
     if (validationResult == "no-questions") {
       this.snackBar.open("Aby zapisać ankietę, musisz stworzyć chociaż jedno pytanie", "OK")
-    } else if (validationResult == "empty-form-name") {
+    } else if (validationResult == "empty-poll-name") {
       this.snackBar.open("Aby zapisać ankietę, musisz nadać jej tytuł", "OK")
     } else if (validationResult == "ok") {
-      const formToEdit = this.formToEdit()
-      if (formToEdit) {
-        this.savedFormsService.updateExistingForm(formToEdit.id, this.currentForm)
+      const pollToEdit = this.pollToEdit()
+
+      if (pollToEdit) {
+        this.savedPollsService.updateExistingPoll(pollToEdit.id, this.currentPoll)
       } else {
-        this.savedFormsService.addForm(this.currentForm)
+        this.savedPollsService.addPoll(this.currentPoll)
       }
-      this.unsavedFormService.restart()
 
-      // TODO It fails with 'NG04014: Invalid configuration of route 'forms/new'. One of the following must be
+      this.unsavedPollService.restart()
+
+      // TODO It fails with 'NG04014: Invalid configuration of route 'polls/new'. One of the following must be
       //  provided: component, loadComponent, redirectTo, children or loadChildren'. I don't understand why
-      // this.router.navigate([RoutePaths.Forms.All])
+      // this.router.navigate([RoutePaths.Polls.All])
 
-      this.router.navigate(["forms"])
+      this.router.navigate(["polls"])
     }
   }
 
@@ -114,10 +118,10 @@ export class PollEditorComponent implements OnInit {
     }
 
     this.fieldsNumberMessage =
-      `w sumie ${this.currentForm.fields.length} ${getQuestionKeyword(this.currentForm.fields.length)}`
+      `w sumie ${this.currentPoll.fields.length} ${getQuestionKeyword(this.currentPoll.fields.length)}`
   }
 
-  private validateFormInput(): string | null {
+  private validatePollInput(): string | null {
     const trimmed = this.newQuestionInputValue.trim()
 
     if (trimmed === "")
@@ -125,12 +129,12 @@ export class PollEditorComponent implements OnInit {
     return trimmed
   }
 
-  private validateWholeForm(): "ok" | "no-questions" | "empty-form-name" {
-    if (this.currentForm.fields.length === 0)
+  private validateWholePoll(): "ok" | "no-questions" | "empty-poll-name" {
+    if (this.currentPoll.fields.length === 0)
       return "no-questions"
 
-    if (this.newFormName.trim() === "")
-      return "empty-form-name"
+    if (this.newPollName.trim() === "")
+      return "empty-poll-name"
 
     return "ok"
   }

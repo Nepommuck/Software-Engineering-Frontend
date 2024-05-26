@@ -1,8 +1,8 @@
-@if (form) {
-  <h4> {{ form.name }} </h4>
+@if (poll) {
+  <h4> {{ poll.name }} </h4>
 
   <div>
-    @for (field of form.fields; track $index) {
+    @for (field of poll.fields; track $index) {
       <p> {{ ($index + 1) + ". " + field.question }} </p>
     }
   </div>

@@ -1,24 +1,24 @@
 import {Routes} from '@angular/router';
 import {HomeViewComponent} from "./home/home-view/home-view.component";
-import {SavedFormsInspectorComponent} from "./polls/inspector/saved-forms-inspector/saved-forms-inspector.component";
-import {SingleSavedFormComponent} from "./polls/inspector/single-saved-form/single-saved-form.component";
+import {SavedPollsListComponent} from "./polls/inspector/saved-polls-list/saved-polls-list.component";
+import {SinglePollInspectorComponent} from "./polls/inspector/single-poll-inspector/single-poll-inspector.component";
 import {PollEditorComponent} from "./polls/editor/poll-editor.component";
 import {ExistingPollEditorComponent} from "./polls/editor/existing-poll-editor/existing-poll-editor.component";
 
 export const RoutePaths = {
   Home: "",
-  Forms: {
-    All: "forms",
-    New: "forms/new",
-    Edit: "forms/edit/:id",
-    InspectSingleForm: "forms/:id",
+  Polls: {
+    All: "polls",
+    New: "polls/new",
+    Edit: "polls/edit/:id",
+    InspectSinglePoll: "polls/:id",
   }
 }
 
 export const routes: Routes = [
   {path: RoutePaths.Home, component: HomeViewComponent},
-  {path: RoutePaths.Forms.New, component: PollEditorComponent},
-  {path: RoutePaths.Forms.All, component: SavedFormsInspectorComponent},
-  {path: RoutePaths.Forms.InspectSingleForm, component: SingleSavedFormComponent},
-  {path: RoutePaths.Forms.Edit, component: ExistingPollEditorComponent},
+  {path: RoutePaths.Polls.New, component: PollEditorComponent},
+  {path: RoutePaths.Polls.All, component: SavedPollsListComponent},
+  {path: RoutePaths.Polls.InspectSinglePoll, component: SinglePollInspectorComponent},
+  {path: RoutePaths.Polls.Edit, component: ExistingPollEditorComponent},
 ];

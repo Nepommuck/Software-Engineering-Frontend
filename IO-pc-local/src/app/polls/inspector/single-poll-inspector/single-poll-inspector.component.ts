@@ -1,18 +1,23 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {SavedPollsService} from "../../saved-polls.service";
-import {ActivatedRoute, Router} from "@angular/router";
+import {MatIcon} from "@angular/material/icon";
+import {MatButton, MatIconButton} from "@angular/material/button";
 import {PollId, SavedPoll} from "../../model";
-import {PollEditorComponent} from "../poll-editor.component";
+import {ActivatedRoute, Router, RouterLink} from "@angular/router";
+import {SavedPollsService} from "../../saved-polls.service";
 
 @Component({
-  selector: 'app-existing-poll-editor',
+  selector: 'app-single-poll-inspector',
   standalone: true,
   imports: [
-    PollEditorComponent
+    MatIcon,
+    MatIconButton,
+    MatButton,
+    RouterLink
   ],
-  templateUrl: './existing-poll-editor.component.html',
+  templateUrl: './single-poll-inspector.component.html',
+  styleUrl: './single-poll-inspector.component.css'
 })
-export class ExistingPollEditorComponent implements OnInit {
+export class SinglePollInspectorComponent implements OnInit {
   protected poll?: SavedPoll
   private savedPollsService = inject(SavedPollsService)
   private activatedRoute = inject(ActivatedRoute)
