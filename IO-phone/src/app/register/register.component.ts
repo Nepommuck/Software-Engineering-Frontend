@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { LobbyEvent, LobbyEventStatus } from './model';
 
 import {MatButton} from "@angular/material/button";
-
+import {MatInputModule} from '@angular/material/input';
 
 import { RegisterService } from './register.service';
 import { IStudent } from './model';
@@ -16,7 +16,7 @@ import { IStudent } from './model';
   imports: [
     NgIf,
     FormsModule,
-    MatButton
+    MatButton, MatInputModule
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
@@ -30,7 +30,7 @@ export class RegisterComponent {
   constructor(private router: Router, private registerService: RegisterService) {}
 
   ngOnInit() {
-    //FIXME: subscription should be cancel when on unmount/redirection! 
+    //FIXME: subscription should be canceled when on unmount/redirection! 
 
     this.registerService.status.subscribe(event => {
       switch (event.status) {
@@ -55,6 +55,10 @@ export class RegisterComponent {
           break;
       }
     })
+  }
+
+  ngOnDestroy() {
+    this.registerService.status.unsubscribe();
   }
 
   submitForm() {
