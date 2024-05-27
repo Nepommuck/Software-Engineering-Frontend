@@ -37,24 +37,26 @@ export class PollEditorComponent implements OnInit {
 
   protected newQuestionInputValue: string = ""
   protected fieldsNumberMessage = ""
-  protected newPollName = ""
   protected currentPoll = this.unsavedPollService.poll
+  protected newPollName = this.unsavedPollService.poll.name
 
   ngOnInit(): void {
-    const pollToEdit = this.pollToEdit()
-    if (pollToEdit) {
-      this.unsavedPollService.load(pollToEdit)
-      this.newPollName = pollToEdit.name
-      this.currentPoll = pollToEdit
-    }
-
-    this.updateFieldsNumberMessage()
-
     this.unsavedPollService.pollChanges$.subscribe(updatedPoll => {
         this.currentPoll = updatedPoll
+        this.newPollName = updatedPoll.name
         this.updateFieldsNumberMessage()
       }
     )
+
+    const pollToEdit = this.pollToEdit()
+    if (pollToEdit) {
+      this.unsavedPollService.load(pollToEdit)
+    }
+    this.updateFieldsNumberMessage()
+  }
+
+  protected updateFormName(): void {
+    this.unsavedPollService.updateName(this.newPollName)
   }
 
   protected addField(): void {

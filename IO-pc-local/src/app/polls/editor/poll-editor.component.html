@@ -1,7 +1,7 @@
 <h4>Obecna ankieta ({{ fieldsNumberMessage }}):</h4>
 
 <label for="name">Tytuł </label>
-<input [(ngModel)]="newPollName" id="name" type="text">
+<input id="name" type="text" [(ngModel)]="newPollName" (input)="updateFormName()">
 
 <div class="existing-questions">
   @for (field of currentPoll.fields; track $index) {

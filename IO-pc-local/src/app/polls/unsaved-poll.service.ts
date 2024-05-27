@@ -24,8 +24,11 @@ export class UnsavedPollService {
   addField(question: string): void {
     const newField: PollField = {id: this.firstFreeFieldId, question}
     this.firstFreeFieldId++
-    this.currentPoll.fields.push(newField)
 
+    this.currentPoll = {
+      ...this.currentPoll,
+      fields: this.currentPoll.fields.concat(newField)
+    }
     this.emitChange()
   }
 
@@ -52,8 +55,11 @@ export class UnsavedPollService {
       return false
     }
 
-    [this.currentPoll.fields[fieldIndex], this.currentPoll.fields[secondFieldIndex]] =
-      [this.currentPoll.fields[secondFieldIndex], this.currentPoll.fields[fieldIndex]]
+    const pollFields = [...this.currentPoll.fields];
+    [pollFields[fieldIndex], pollFields[secondFieldIndex]] =
+      [pollFields[secondFieldIndex], pollFields[fieldIndex]]
+
+    this.currentPoll = {...this.currentPoll, fields: pollFields}
     this.emitChange()
 
     return true
@@ -69,10 +75,12 @@ export class UnsavedPollService {
     this.emitChange()
   }
 
+  updateName(newPollName: string) {
+    this.currentPoll = {...this.currentPoll, name: newPollName}
+    this.emitChange()
+  }
+
   private emitChange(): void {
-    this.pollChanges.next({
-      ...this.currentPoll,
-      fields: [...this.currentPoll.fields]
-    });
+    this.pollChanges.next({...this.currentPoll});
   }
 }

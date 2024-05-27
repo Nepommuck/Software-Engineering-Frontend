@@ -8,7 +8,7 @@ export interface PollField {
 
 export interface Poll {
   readonly name: string
-  readonly fields: PollField[]
+  readonly fields: readonly PollField[]
 }
 
 export type SavedPoll = Poll & {
