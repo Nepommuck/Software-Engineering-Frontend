@@ -1,23 +1,24 @@
-.register {
+div.register {
     max-width: 600px;
     margin: 0 auto;
     display: flex;
     justify-content: center;
+    flex-direction: column;
 }
 
-.register__form {
+form.register {
     width: 100%;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
 }
-.register__button {
+button.register {
     height: 2rem;
     margin: 5px auto;
     width: 100%;
 }
 
-.register__input {
+input.register[type=text] {
     margin: 5px auto;
     width: 100%;
 }
