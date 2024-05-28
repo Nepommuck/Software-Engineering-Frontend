@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {MatButton} from "@angular/material/button";
 import {NavigationStart, Router, RouterLink} from "@angular/router";
+import {RoutePaths} from "../../app.routes";
 
 interface NavBarEntry {
   readonly name: string;
@@ -8,8 +9,9 @@ interface NavBarEntry {
 }
 
 const NavBarEntries: NavBarEntry[] = [
-  {name: "Strona główna", routerLink: ""},
-  {name: "Stwórz formularz", routerLink: "create"},
+  {name: "Strona główna", routerLink: RoutePaths.Home},
+  {name: "Wybierz ankietę", routerLink: RoutePaths.Polls.All},
+  {name: "Stwórz ankietę", routerLink: RoutePaths.Polls.New},
 ]
 
 @Component({
