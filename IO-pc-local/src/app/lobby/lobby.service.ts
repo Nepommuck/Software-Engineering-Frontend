@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { IStudent } from './shared/model';
+import { Student } from './shared/model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LobbyService {
-  private readonly _students: BehaviorSubject<IStudent[]> = new BehaviorSubject([] as IStudent[]);
-  public students$: Observable<IStudent[]> = this._students.asObservable();
+  private readonly _students: BehaviorSubject<Student[]> = new BehaviorSubject([] as Student[]);
+  public students$: Observable<Student[]> = this._students.asObservable();
   private sse: EventSource | null = null;
 
   constructor() {
@@ -18,7 +18,7 @@ export class LobbyService {
     )
   }
 
-  removeUser(student: IStudent): void {
+  removeUser(student: Student): void {
     //TODO: notify the server about the removal
     this._students.next(this._students.getValue().filter(x => x.name != student.name));
   }

@@ -1,5 +1,4 @@
-export interface IStudent {
-    id?: number;
+export interface Student {
     name: string;
 }
   

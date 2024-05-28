@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IStudent } from './shared/model';
+import { Student } from './shared/model';
 import { LobbyService } from './lobby.service';
 import { Observable } from 'rxjs';
 
@@ -23,14 +23,14 @@ import { Router } from '@angular/router';
 
 export class LobbyComponent {
 
-  public students$: Observable<IStudent[]>;
+  public students$: Observable<Student[]>;
 
   constructor(private router: Router,private lobbyService: LobbyService){
     this.students$ = lobbyService.students$;
   }
 
 
-  onDeleteBtnClick(student :IStudent) {
+  deleteStudent(student: Student) {
     this.lobbyService.removeUser(student);
   }
 
