@@ -1,0 +1,39 @@
+<h4>Obecna ankieta ({{ fieldsNumberMessage }}):</h4>
+
+<label for="name">Tytuł </label>
+<input id="name" type="text" [(ngModel)]="newPollName" (input)="updateFormName()">
+
+<div class="existing-questions">
+  @for (field of currentPoll.fields; track $index) {
+    <p> {{ ($index + 1) + ". " + field.question }} </p>
+
+    <div>
+      <button mat-icon-button (click)="moveFieldUp(field.id)" [disabled]="$index === 0" matTooltip="Przesuń w górę">
+        <mat-icon>arrow_upward</mat-icon>
+      </button>
+
+      <button
+        mat-icon-button
+        (click)="moveFieldDown(field.id)"
+        [disabled]="$index === currentPoll.fields.length - 1"
+        matTooltip="Przesuń w dół"
+      >
+        <mat-icon>arrow_downward</mat-icon>
+      </button>
+
+      <button mat-icon-button (click)="removeField(field.id)" matTooltip="Usuń pytanie">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  }
+</div>
+
+<h4>Dodaj nowe pole do ankiety</h4>
+
+<input [(ngModel)]="newQuestionInputValue" type="text">
+<button (click)="addField()" mat-button>Dodaj</button>
+
+<div class="bottom-buttons">
+  <button (click)="savePollHandler()" mat-stroked-button>Zapisz ankietę</button>
+  <button mat-button routerLink="../..">Anuluj</button>
+</div>

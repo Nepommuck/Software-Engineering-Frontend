@@ -1,0 +1,11 @@
+@if (poll) {
+  <h4> {{ poll.name }} </h4>
+
+  <div>
+    @for (field of poll.fields; track $index) {
+      <p> {{ ($index + 1) + ". " + field.question }} </p>
+    }
+  </div>
+
+  <button mat-button routerLink="..">Wróć</button>
+}
