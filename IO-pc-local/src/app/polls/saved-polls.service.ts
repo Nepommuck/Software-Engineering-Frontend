@@ -40,8 +40,8 @@ export class SavedPollsService {
 
   addPoll(newPoll: Poll): void {
     this.currentPolls.push({
-      id: this.firstFreeId,
       ...newPoll,
+      id: this.firstFreeId,
     })
     this.firstFreeId++
     this.emitChange()
