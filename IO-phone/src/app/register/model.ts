@@ -7,8 +7,7 @@ export enum LobbyEventStatus {
     UNKNOWN_ERROR
 }
 
-export interface Student {
-    id?: number;
+export interface RegistrationFormValue {
     name: string;
 }
 
