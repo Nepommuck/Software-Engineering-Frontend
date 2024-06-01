@@ -5,7 +5,7 @@
     @for (student of (students$ | async); track student) {
         <li class="users">
             <mat-card>
-                <mat-card-content style="display: flex; justify-content: space-between; align-items: center;">        
+                <mat-card-content class="users__card">        
                     {{student.name}}
                     <button 
                         mat-icon-button

@@ -20,7 +20,7 @@ export class LobbyService {
 
   removeUser(student: Student): void {
     //TODO: notify the server about the removal
-    this._students.next(this._students.getValue().filter(x => x.name != student.name));
+    this._students.next(this._students.getValue().filter(x => x.name !== student.name));
   }
 
   startSession() {
