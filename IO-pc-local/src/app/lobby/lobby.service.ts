@@ -1,26 +1,43 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { Student } from './shared/model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LobbyService {
-  private readonly _students: BehaviorSubject<Student[]> = new BehaviorSubject([] as Student[]);
-  public students$: Observable<Student[]> = this._students.asObservable();
+  public readonly students = new Subject<Student[]>();
   private sse: EventSource | null = null;
 
+
   constructor() {
-    // this.sse = new EventSource("http://localhost:8000/", 
-    // { withCredentials: true, });
-    this._students.next(
-      [{name: "Maciuś"}, {name: "Zuzia"}, {name: "Franek"}, {name: "Janek"}]
-    )
+    this.sse = new EventSource("http://localhost:8000/game/lobby", 
+    { withCredentials: true, });
+
+    this.sse.onopen = open => {
+      console.log("open: ", open);
+    }
+
+    this.sse.onmessage = msg => {
+      console.log(msg.data);
+      this.students.next(JSON.parse(`${msg.data}`))
+    }
+
+    this.sse.onerror = err => {
+      console.error("SSE ERROR: ", err);
+    }
   }
 
-  removeUser(student: Student): void {
+  get students$(): Observable<Student[]> {
+    return this.students.asObservable();
+  }
+
+  removeUser(student: Student) {
     //TODO: notify the server about the removal
-    this._students.next(this._students.getValue().filter(x => x.name !== student.name));
+    return fetch(`http://localhost:8000/remove/${student.name}`, {
+      method: "post"
+    })
+    // this.students.next(this.students.getValue().filter(x => x.name !== student.name));
   }
 
   startSession() {
