@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Student } from './shared/model';
 import { LobbyService } from './lobby.service';
@@ -21,26 +21,42 @@ import { Router } from '@angular/router';
 })
 
 
-export class LobbyComponent {
+export class LobbyComponent implements OnInit{
+  private lobbyService = inject(LobbyService);
+  private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
 
-  public students$: Observable<Student[]>;
+  students = [] as Student[];
 
-  constructor(private router: Router,private lobbyService: LobbyService){
-    this.students$ = lobbyService.students$;
+  ngOnInit(): void {
+    this.lobbyService.students$.subscribe(next => {
+      this.students = next;
+      
+      //apparently Angular components don't update 
+      //if the object ref doesn't change, so we need to force the update
+      this.cdr.detectChanges()
+    })
+  }
+
+  async deleteStudent(student: Student) {
+    await this.lobbyService.removeUser(student);
   }
 
 
-  deleteStudent(student: Student) {
-    this.lobbyService.removeUser(student);
-  }
-
-  async startGame() {
+  startGame() {
     //TODO:
     //- display modal
     //- redirect to next page on accept
 
-    await this.lobbyService.startSession();
-    this.router.navigate(["/", "progress"]);
+    this.lobbyService.startSession().then(
+      () => {
+        //TODO: HANDLE NETWORK ERRORS!
+        this.router.navigate(["/", "progress"]);
+      }
+    ).catch(err => {
+      alert("Nie udało się rozpocząć sesji!");
+      console.log("error: ", err);
+    })
   }
 
   cancelGame() {

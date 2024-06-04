@@ -1,30 +1,47 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { Student } from './shared/model';
+
+import { API_URL } from '../../config';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LobbyService {
-  private readonly _students: BehaviorSubject<Student[]> = new BehaviorSubject([] as Student[]);
-  public students$: Observable<Student[]> = this._students.asObservable();
-  private sse: EventSource | null = null;
+  public readonly students = new Subject<Student[]>();
+  private sse: EventSource;
+
 
   constructor() {
-    // this.sse = new EventSource("http://localhost:8000/", 
-    // { withCredentials: true, });
-    this._students.next(
-      [{name: "Maciuś"}, {name: "Zuzia"}, {name: "Franek"}, {name: "Janek"}]
-    )
+    this.sse = new EventSource(`${API_URL}/game/lobby`, 
+    { withCredentials: true, });
+
+    this.sse.onopen = open => {
+      console.log("open: ", open);
+    }
+
+    this.sse.onmessage = msg => {
+      console.log(msg.data);
+      this.students.next(JSON.parse(msg.data))
+    }
+
+    this.sse.onerror = err => {
+      console.error("SSE ERROR: ", err);
+    }
   }
 
-  removeUser(student: Student): void {
-    //TODO: notify the server about the removal
-    this._students.next(this._students.getValue().filter(x => x.name !== student.name));
+  get students$(): Observable<Student[]> {
+    return this.students.asObservable();
+  }
+
+  removeUser(student: Student) {
+    return fetch(`${API_URL}/remove/${student.name}`, {
+      method: "post"
+    })
   }
 
   startSession() {
-    return fetch("http://localhost:8000/start-game", {
+    return fetch(`${API_URL}/start-game`, {
       method: "post"
     })
     // .then(res => {}) //TODO: handle any errors?

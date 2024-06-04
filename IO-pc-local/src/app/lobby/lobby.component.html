@@ -2,7 +2,7 @@
 <button (click)="cancelGame()" mat-button color="warn"> Zakończ sesję </button>
 <h2> Uczniowie: </h2>
 <ul>
-    @for (student of (students$ | async); track student) {
+    @for (student of students; track student) {
         <li class="users">
             <mat-card>
                 <mat-card-content class="users__card">        
