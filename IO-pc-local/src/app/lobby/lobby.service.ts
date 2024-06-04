@@ -2,16 +2,18 @@ import { Injectable } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 import { Student } from './shared/model';
 
+import { API_URL } from '../../config';
+
 @Injectable({
   providedIn: 'root'
 })
 export class LobbyService {
   public readonly students = new Subject<Student[]>();
-  private sse: EventSource | null = null;
+  private sse: EventSource;
 
 
   constructor() {
-    this.sse = new EventSource("http://localhost:8000/game/lobby", 
+    this.sse = new EventSource(`${API_URL}/game/lobby`, 
     { withCredentials: true, });
 
     this.sse.onopen = open => {
@@ -20,7 +22,7 @@ export class LobbyService {
 
     this.sse.onmessage = msg => {
       console.log(msg.data);
-      this.students.next(JSON.parse(`${msg.data}`))
+      this.students.next(JSON.parse(msg.data))
     }
 
     this.sse.onerror = err => {
@@ -33,15 +35,13 @@ export class LobbyService {
   }
 
   removeUser(student: Student) {
-    //TODO: notify the server about the removal
-    return fetch(`http://localhost:8000/remove/${student.name}`, {
+    return fetch(`${API_URL}/remove/${student.name}`, {
       method: "post"
     })
-    // this.students.next(this.students.getValue().filter(x => x.name !== student.name));
   }
 
   startSession() {
-    return fetch("http://localhost:8000/start-game", {
+    return fetch(`${API_URL}/start-game`, {
       method: "post"
     })
     // .then(res => {}) //TODO: handle any errors?

@@ -28,10 +28,6 @@ export class LobbyComponent implements OnInit{
 
   students = [] as Student[];
 
-  constructor(){
-    // this.students$ = this.lobbyService.students$;
-  }
-
   ngOnInit(): void {
     this.lobbyService.students$.subscribe(next => {
       this.students = next;
