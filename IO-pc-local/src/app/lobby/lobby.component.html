@@ -1,5 +1,12 @@
+<mat-card class="connection"> 
+    <mat-card-content>
+        Aby dołączyć wpisz w przeglądarce adres: <br/><strong>{{ip}}:4300</strong>
+    </mat-card-content>
+</mat-card>
+
 <button (click)="startGame()" mat-button> Rozpocznij ankietę </button>
 <button (click)="cancelGame()" mat-button color="warn"> Zakończ sesję </button>
+
 <h2> Uczniowie: </h2>
 <ul>
     @for (student of students; track student) {

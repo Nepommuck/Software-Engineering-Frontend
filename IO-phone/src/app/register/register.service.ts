@@ -1,9 +1,9 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
-import { LobbyEvent, LobbyEventStatus } from './model';
+import { LobbyEvent, LobbyEventStatus, LobbyEventMessages } from './model';
+
 
 const SERVER_URL = "http://localhost:8000" 
-const SUCCESS_MSG = "registered successfully";
 
 
 @Injectable({
@@ -37,10 +37,21 @@ export class RegisterService implements OnDestroy {
   
       this.sse.onmessage = e => {
         console.log("Message: ", e);
-        if (e.data === SUCCESS_MSG) {
-          this.status.next({status: LobbyEventStatus.SUCCESS});
-        } else {
-          console.log("Unknown message: ", e);
+
+
+        switch (e.data) {
+          case LobbyEventMessages.SUCCESS:          
+            this.status.next({status: LobbyEventStatus.SUCCESS});
+            break;
+          case LobbyEventMessages.START:
+            this.status.next({status: LobbyEventStatus.SESSION_STARTED});
+            break;
+          case LobbyEventMessages.USER_KICKED:
+            this.status.next({status: LobbyEventStatus.USER_KICKED});
+            break;
+          default:
+            console.log("Unknown message: ", e);
+            break;
         }
         //TODO: handle other events
       }

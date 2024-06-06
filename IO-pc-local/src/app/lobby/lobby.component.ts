@@ -2,19 +2,16 @@ import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Student } from './shared/model';
 import { LobbyService } from './lobby.service';
-import { Observable } from 'rxjs';
 
-import { MatButtonModule } from '@angular/material/button';
-import { MatCard, MatCardContent } from '@angular/material/card';
-import { MatIcon } from '@angular/material/icon';
 import { Router } from '@angular/router';
+import { MaterialModule } from '../material.module';
 
 @Component({
   selector: 'lobby',
   standalone: true,
   imports: [
     CommonModule,
-    MatButtonModule, MatCard, MatCardContent, MatIcon
+    MaterialModule
   ],
   templateUrl: './lobby.component.html',
   styleUrl: './lobby.component.css'
@@ -26,6 +23,8 @@ export class LobbyComponent implements OnInit{
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
 
+  public ip = "";
+
   students = [] as Student[];
 
   ngOnInit(): void {
@@ -36,6 +35,11 @@ export class LobbyComponent implements OnInit{
       //if the object ref doesn't change, so we need to force the update
       this.cdr.detectChanges()
     })
+
+    this.lobbyService.serverIp.subscribe(value => {
+      // console.log(value)
+      this.ip = value["ipAddress"];
+    });
   }
 
   async deleteStudent(student: Student) {

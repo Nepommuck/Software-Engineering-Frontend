@@ -7,6 +7,12 @@ export enum LobbyEventStatus {
     UNKNOWN_ERROR
 }
 
+export const LobbyEventMessages = {
+    SUCCESS: "registered successfully",
+    START: "start",
+    USER_KICKED: "kicked"
+}
+
 export interface RegistrationFormValue {
     name: string;
 }

@@ -1,3 +1,7 @@
+.connection {
+    margin: 20px;
+}
+
 .users {
     list-style: none;
     margin: 10px;
