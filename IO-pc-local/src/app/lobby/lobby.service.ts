@@ -5,6 +5,7 @@ import { API_URL } from '../../config';
 
 import { HttpClient } from '@angular/common/http';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -36,10 +37,6 @@ export class LobbyService {
   get students$(): Observable<Student[]> {
     return this.students.asObservable();
   }
-
-  // getConnectionInfo(): Promise<any> {
-  //   return fetch(`${API_URL}/ip`)
-  // }
 
   removeUser(student: Student) {
     return fetch(`${API_URL}/remove/${student.name}`, {
