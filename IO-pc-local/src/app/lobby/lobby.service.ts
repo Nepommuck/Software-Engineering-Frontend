@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Subject, Observable, from, BehaviorSubject } from 'rxjs';
+import { Subject, Observable, BehaviorSubject } from 'rxjs';
 import { Student } from './shared/model';
 import { API_URL } from '../../config';
 import { PollField } from '../polls/model'; 
@@ -8,6 +8,10 @@ import { PollField } from '../polls/model';
 import { HttpClient } from '@angular/common/http';
 import { SavedPoll } from '../polls/model';
 
+
+interface GetServerIpResponse {
+  readonly ipAddress: string
+}
 
 interface GetServerIpResponse {
   readonly ipAddress: string

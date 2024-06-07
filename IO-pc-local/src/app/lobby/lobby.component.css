@@ -27,6 +27,7 @@
 
 .poll__select {
     width: 400px;
+    margin: 20px;
 }
 
 .users {
