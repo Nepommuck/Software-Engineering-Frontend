@@ -23,7 +23,7 @@ export class RegisterService implements OnDestroy {
     //TODO: try to register to SSE, and await info about session start/user being kicked out;
 
       this.sse = new EventSource(
-        `${SERVER_URL}/register/${username}`,
+        `${SERVER_URL}/user/register/${username}`,
         { withCredentials: true, }        //makes it possible to connect with server with different origin
       );
   
