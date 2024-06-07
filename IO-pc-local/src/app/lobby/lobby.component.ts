@@ -5,6 +5,8 @@ import { LobbyService } from './lobby.service';
 
 import { Router } from '@angular/router';
 import { MaterialModule } from '../material.module';
+import { SavedPoll } from '../polls/model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'lobby',
@@ -22,10 +24,14 @@ export class LobbyComponent implements OnInit{
   private lobbyService = inject(LobbyService);
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
+  private snackBar = inject(MatSnackBar);
 
   public ip = "";
 
   students = [] as Student[];
+  polls = [] as SavedPoll[];
+
+  selectedPollId = "0";
 
   ngOnInit(): void {
     this.lobbyService.students$.subscribe(next => {
@@ -39,6 +45,10 @@ export class LobbyComponent implements OnInit{
     this.lobbyService.serverIp.subscribe(value => {
       this.ip = value["ipAddress"];
     });
+
+    this.lobbyService.polls.subscribe(polls => {
+      this.polls = polls;
+    })
   }
 
   async deleteStudent(student: Student) {
@@ -50,16 +60,19 @@ export class LobbyComponent implements OnInit{
     //TODO:
     //- display modal
     //- redirect to next page on accept
-
-    this.lobbyService.startSession().then(
-      () => {
-        //TODO: HANDLE NETWORK ERRORS!
-        this.router.navigate(["/", "progress"]);
-      }
-    ).catch(err => {
-      alert("Nie udało się rozpocząć sesji!");
-      console.log("error: ", err);
-    })
+    
+    if (this.selectedPollId !== "0") {
+      this.lobbyService.startSession().then(
+        () => {
+          this.router.navigate(["/", "progress"]);
+        }
+      ).catch(err => {
+        this.snackBar.open("Nie udało sie połączyć z serwerem! Upewnij się że jest on włączony.", "Zamknij");
+        console.error("error: ", err);
+      })
+    } else {
+      this.snackBar.open("Nie wybrano ankiety!", "Zamknij");
+    }
   }
 
   cancelGame() {
