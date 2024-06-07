@@ -33,9 +33,9 @@
 </div>
 <div>
     <h2> Uczniowie: </h2>
-    <ul>
+    <ul  class="users">
         @for (student of students; track student) {
-            <li class="users">
+            <li>
                 <mat-card>
                     <mat-card-content class="users__card">        
                         {{student.name}}
