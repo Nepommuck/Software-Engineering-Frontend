@@ -37,7 +37,6 @@ export class LobbyComponent implements OnInit{
     })
 
     this.lobbyService.serverIp.subscribe(value => {
-      // console.log(value)
       this.ip = value["ipAddress"];
     });
   }

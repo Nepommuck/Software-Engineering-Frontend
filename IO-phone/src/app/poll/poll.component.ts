@@ -12,7 +12,7 @@ export class PollComponent implements OnInit {
   private pollService = inject(PollService);
 
   ngOnInit(): void {
-    //TODO: fetch a poll template from server and store it
+    //TODO SCRUM-82: fetch a poll template from server and store it
     // this.pollService.getPollTemplate(); 
   }
   

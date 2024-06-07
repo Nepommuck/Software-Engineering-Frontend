@@ -1,5 +1,15 @@
 .connection {
     margin: 20px;
+    font-size: 1.3rem;
+    text-align: center;
+    padding: 10px;
+}
+
+.connection__highlight {
+    font-weight: bold;
+    font-size: 2em;
+    text-align: center;
+    margin: 20px;
 }
 
 .users {

@@ -6,6 +6,10 @@ import { API_URL } from '../../config';
 import { HttpClient } from '@angular/common/http';
 
 
+interface GetServerIpResponse {
+  readonly ipAddress: string
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -14,7 +18,7 @@ export class LobbyService {
   private sse: EventSource;
 
   private httpClient = inject(HttpClient);
-  public readonly serverIp = this.httpClient.get<{ipAddress: string}>(`${API_URL}/ip`); //I have no idea how to name the interface for object's type
+  public readonly serverIp = this.httpClient.get<GetServerIpResponse>(`${API_URL}/ip`);
 
   constructor() {
     this.sse = new EventSource(`${API_URL}/game/lobby`, 

@@ -10,8 +10,8 @@ export enum LobbyEventStatus {
 export const LobbyEventMessages = {
     SUCCESS: "registered successfully",
     START: "start",
-    USER_KICKED: "kicked"
-}
+    USER_KICKED: "removed from lobby",
+} as const;
 
 export interface RegistrationFormValue {
     name: string;

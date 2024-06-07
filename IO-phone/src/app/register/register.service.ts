@@ -50,10 +50,9 @@ export class RegisterService implements OnDestroy {
             this.status.next({status: LobbyEventStatus.USER_KICKED});
             break;
           default:
-            console.log("Unknown message: ", e);
+            console.error("Unknown message: ", e);
             break;
         }
-        //TODO: handle other events
       }
   }
 }
