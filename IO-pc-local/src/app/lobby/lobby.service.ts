@@ -43,13 +43,13 @@ export class LobbyService {
   }
 
   removeUser(student: Student) {
-    return fetch(`${API_URL}/remove/${student.name}`, {
+    return fetch(`${API_URL}/user/remove/${student.name}`, {
       method: "post"
     })
   }
 
   startSession() {
-    return fetch(`${API_URL}/start-game`, {
+    return fetch(`${API_URL}/game/start`, {
       method: "post"
     })
     // .then(res => {}) //TODO: handle any errors?
