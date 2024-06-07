@@ -4,7 +4,7 @@
         <form #userForm="ngForm" class="register" (submit)="submitForm()">
             <mat-form-field appearance="outline">
                 <mat-label>Podaj swoje imię i nazwisko</mat-label>
-                <input matInput name="name" [(ngModel)]="model.name" type="text" minlength="4" required class="register" placeholder="Jan Kowalski"/>
+                <input matInput name="name" [(ngModel)]="model.name" type="text" minlength="2" required class="register" placeholder="Jan Kowalski"/>
             </mat-form-field>
     
             <button [disabled]="!userForm.valid" mat-button class="register"> Dołącz </button>

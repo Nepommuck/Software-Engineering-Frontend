@@ -24,7 +24,7 @@ import { RegistrationFormValue } from './model';
   styleUrl: './register.component.css'
 })
 export class RegisterComponent implements OnInit {
-  private readonly router = inject(Router);           //TODO: can be used to navigate to next view as soon as required backend endpoints are ready 
+  private readonly router = inject(Router);
   private readonly changeDetector = inject(ChangeDetectorRef);
   private readonly registerService = inject(RegisterService);
 
@@ -41,6 +41,7 @@ export class RegisterComponent implements OnInit {
           break;
         case LobbyEventStatus.SESSION_STARTED:
           //TODO: NAVIGATE TO NEXT PHASE
+          this.router.navigate(["poll"]);
           break;
         case LobbyEventStatus.FAILED:
           this.isRegistered = false;
@@ -53,6 +54,7 @@ export class RegisterComponent implements OnInit {
         case LobbyEventStatus.USER_KICKED:
           this.isRegistered = false;
           this.displayErrorMesage("Zostałeś usunięty z pokoju, spróbuj połączyć się ponownie");
+          this.model.name = "";
           break;
         case LobbyEventStatus.UNKNOWN_ERROR:
           this.isRegistered = false;
