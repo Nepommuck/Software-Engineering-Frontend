@@ -1,9 +1,9 @@
-import { Injectable, inject } from '@angular/core';
-import { Subject, Observable } from 'rxjs';
-import { Student } from './shared/model';
-import { API_URL } from '../../config';
+import {inject, Injectable} from '@angular/core';
+import {Observable, Subject} from 'rxjs';
+import {Student} from './shared/model';
+import {API_URL} from '../../config';
 
-import { HttpClient } from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 
 
 interface GetServerIpResponse {
@@ -21,8 +21,8 @@ export class LobbyService {
   public readonly serverIp = this.httpClient.get<GetServerIpResponse>(`${API_URL}/ip`);
 
   constructor() {
-    this.sse = new EventSource(`${API_URL}/game/lobby`, 
-    { withCredentials: true, });
+    this.sse = new EventSource(`${API_URL}/game/lobby`,
+      {withCredentials: true,});
 
     this.sse.onopen = open => {
       console.log("open: ", open);
@@ -42,17 +42,37 @@ export class LobbyService {
     return this.students.asObservable();
   }
 
-  removeUser(student: Student) {
+  removeUser(student: Student): Promise<Response> {
     return fetch(`${API_URL}/user/remove/${student.name}`, {
       method: "post"
     })
   }
 
-  startSession() {
+  startSession(): Promise<Response> {
     return fetch(`${API_URL}/game/start`, {
       method: "post"
-    })
-    // .then(res => {}) //TODO: handle any errors?
-    ;
+    }).then(response => {
+      if (response.ok) {
+        return response
+      } else {
+        return response.text().then(text => {
+          throw new Error(`Failed to end session: ${text}`);
+        });
+      }
+    });
+  }
+
+  endSession(): Promise<Response> {
+    return fetch(`${API_URL}/game/end`, {
+      method: "post",
+    }).then(response => {
+      if (response.ok) {
+        return response
+      } else {
+        return response.text().then(text => {
+          throw new Error(`Failed to end session: ${text}`);
+        });
+      }
+    });
   }
 }

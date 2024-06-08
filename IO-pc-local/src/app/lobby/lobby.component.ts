@@ -1,10 +1,10 @@
-import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Student } from './shared/model';
-import { LobbyService } from './lobby.service';
+import {ChangeDetectorRef, Component, inject, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {Student} from './shared/model';
+import {LobbyService} from './lobby.service';
 
-import { Router } from '@angular/router';
-import { MaterialModule } from '../material.module';
+import {Router} from '@angular/router';
+import {MaterialModule} from '../material.module';
 
 @Component({
   selector: 'lobby',
@@ -18,7 +18,7 @@ import { MaterialModule } from '../material.module';
 })
 
 
-export class LobbyComponent implements OnInit{
+export class LobbyComponent implements OnInit {
   private lobbyService = inject(LobbyService);
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
@@ -30,8 +30,8 @@ export class LobbyComponent implements OnInit{
   ngOnInit(): void {
     this.lobbyService.students$.subscribe(next => {
       this.students = next;
-      
-      //apparently Angular components don't update 
+
+      //apparently Angular components don't update
       //if the object ref doesn't change, so we need to force the update
       this.cdr.detectChanges()
     })
@@ -57,14 +57,19 @@ export class LobbyComponent implements OnInit{
         this.router.navigate(["/", "progress"]);
       }
     ).catch(err => {
-      alert("Nie udało się rozpocząć sesji!");
+      alert("Niespodziewany błąd: Nie udało się rozpocząć sesji!");
       console.log("error: ", err);
     })
   }
 
   cancelGame() {
-    //TODO:
-    //- display modal
-    //- redirect to Home page
+    this.lobbyService.endSession().then(
+      () => {
+        this.router.navigate(["/"]);
+      }
+    ).catch(err => {
+      alert("Niespodziewany błąd: Nie udało się zakończyć sesji!");
+      console.log("error: ", err);
+    })
   }
 }
