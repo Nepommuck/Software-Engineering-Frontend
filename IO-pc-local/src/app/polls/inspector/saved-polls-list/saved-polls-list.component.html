@@ -5,7 +5,7 @@
     <p> {{ ($index + 1) + ". " + poll.name }} </p>
 
     <button mat-icon-button [routerLink]="'' + poll.id" matTooltip="Zobacz ankietę">
-      <mat-icon>zoom_in</mat-icon>
+      <mat-icon>search</mat-icon>
     </button>
     <button mat-icon-button [routerLink]="'edit/' + poll.id" matTooltip="Edytuj">
       <mat-icon>edit</mat-icon>

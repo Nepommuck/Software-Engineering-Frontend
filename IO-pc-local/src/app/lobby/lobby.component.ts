@@ -30,8 +30,8 @@ export class LobbyComponent implements OnInit{
   ngOnInit(): void {
     this.lobbyService.students$.subscribe(next => {
       this.students = next;
-      
-      //apparently Angular components don't update 
+
+      //apparently Angular components don't update
       //if the object ref doesn't change, so we need to force the update
       this.cdr.detectChanges()
     })
@@ -66,5 +66,9 @@ export class LobbyComponent implements OnInit{
     //TODO:
     //- display modal
     //- redirect to Home page
+  }
+
+  seeResults() {
+    this.router.navigate(["/", "results"]);
   }
 }

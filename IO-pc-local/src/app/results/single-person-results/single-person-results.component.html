@@ -1,0 +1,52 @@
+<div class="top">
+  <h2>Odpowiedzi na temat: {{ results().personName }}</h2>
+
+  <div>
+    <button mat-stroked-button (click)="showAllQuestions()" matTooltip="Rozwiń wszystkie odpowiedzi">
+      Rozwiń wszystkie
+    </button>
+
+    <button mat-button (click)="hideAllQuestions()" matTooltip="Schowaj wszystkie odpowiedzi">
+      Schowaj wszystkie
+    </button>
+  </div>
+</div>
+
+@for (question of questionsWithVisibility; track $index) {
+  <mat-card
+    [class]="(question.isVisible) ? 'visible' : 'hidden'"
+  >
+    <mat-card-content>
+      <div class="answer-row">
+        <p class="bold"> {{ $index + 1 }}. {{ question.question }} </p>
+
+        <button
+          mat-icon-button
+          (click)="switchVisibility(question)"
+          [matTooltip]="((question.isVisible) ? 'Schowaj' : 'Zobacz') + ' odpowiedzi na to pytanie'"
+        >
+          <mat-icon>
+            @if (question.isVisible) {
+              unfold_less
+            } @else {
+              unfold_more
+            }
+          </mat-icon>
+        </button>
+      </div>
+
+      @if (question.isVisible) {
+        @for (answer of question.answers; track answer) {
+          <p>{{ answer.respondentName }}:</p>
+          <p class="bold">{{ answer.answer }}</p>
+        }
+      }
+    </mat-card-content>
+  </mat-card>
+}
+
+<div class="bottom">
+  <button mat-stroked-button (click)="exit.emit()" matTooltip="Wróć do widoku pozostałych osób">
+    Wróć
+  </button>
+</div>
