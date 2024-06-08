@@ -6,6 +6,7 @@ import {MatButton, MatIconButton} from "@angular/material/button";
 import {SinglePersonResultsComponent} from "../single-person-results/single-person-results.component";
 import {MatIcon} from "@angular/material/icon";
 import {MatTooltip} from "@angular/material/tooltip";
+import {MatProgressSpinner} from "@angular/material/progress-spinner";
 
 @Component({
   selector: 'app-poll-results',
@@ -17,7 +18,8 @@ import {MatTooltip} from "@angular/material/tooltip";
     MatIcon,
     MatIconButton,
     MatTooltip,
-    SinglePersonResultsComponent
+    SinglePersonResultsComponent,
+    MatProgressSpinner
   ],
   templateUrl: './poll-results.component.html',
   styleUrl: './poll-results.component.css'
@@ -41,14 +43,17 @@ export class PollResultsComponent implements OnInit {
     this.selectedSinglePersonResults = undefined
   }
 
-  private loadPollResults(): void {
-    this.pollResultsService.pollResults.then(results => {
-        this.error = false
-        this.pollResults = results
-      }
-    ).catch(() => {
-        this.error = true
-      }
-    )
+  protected loadPollResults(): void {
+    this.error = false
+    this.pollResults = undefined
+
+      this.pollResultsService.pollResults.then(results => {
+          this.error = false
+          this.pollResults = results
+        }
+      ).catch(() => {
+          this.error = true
+        }
+      )
   }
 }

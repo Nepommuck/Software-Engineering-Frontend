@@ -5,20 +5,36 @@
   align-items: center;
 }
 
-mat-card {
+mat-card.poll-results {
   margin-bottom: 30px;
   width: calc(
     min(90%, 600px)
   );
+
+  mat-card-content {
+    display: flex;
+    justify-content: space-between;
+  }
 }
 
-mat-card:hover {
+mat-card.poll-results:hover {
   cursor: pointer;
 
   background-color: #f6f6f6;
 }
 
-mat-card-content {
+div.error {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+
+  mat-card-content {
+    display: flex;
+    gap: 30px;
+  }
+
+  button.try-again {
+    align-self: end;
+    margin: 20px;
+  }
 }
+
