@@ -36,6 +36,10 @@
     padding: 0;
 }
 
+.users__item {
+    margin: 10px auto;
+}
+
 .users__card {
     display: flex;
     justify-content: space-between;
