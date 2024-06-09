@@ -9,6 +9,24 @@
     font-weight: bold;
     font-size: 2em;
     text-align: center;
+    margin: 20px !important; /* overwrites Material's .mat-mdc-card-content > :last-child:not(.mat-mdc-card-footer) */
+}
+
+.poll {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.poll__controls {
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+}
+
+.poll__select {
+    width: 400px;
     margin: 20px;
 }
 
@@ -16,6 +34,10 @@
     list-style: none;
     margin: 10px;
     padding: 0;
+}
+
+.users__item {
+    margin: 10px auto;
 }
 
 .users__card {
