@@ -12,6 +12,12 @@
   </div>
 </div>
 
+<div class="show-names-toggle">
+  <mat-slide-toggle labelPosition="before" [(ngModel)]="showAnswerNames">
+    Pokaż autorów odpowiedzi
+  </mat-slide-toggle>
+</div>
+
 @for (question of questionsWithVisibility; track $index) {
   <mat-card
     [class]="(question.isVisible) ? 'visible' : 'hidden'"
@@ -37,7 +43,10 @@
 
       @if (question.isVisible) {
         @for (answer of question.answers; track answer) {
-          <p>{{ answer.respondentName }}:</p>
+
+          @if (showAnswerNames) {
+            <p>{{ answer.respondentName }}:</p>
+          }
           <p class="bold">{{ answer.answer }}</p>
         }
       }

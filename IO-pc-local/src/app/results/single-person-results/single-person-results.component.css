@@ -7,6 +7,16 @@
 div.top {
   display: flex;
   justify-content: space-between;
+
+  button {
+    margin-left: 10px;
+  }
+}
+
+div.show-names-toggle {
+  display: flex;
+  justify-content: end;
+  margin-top: 10px;
 }
 
 mat-card {

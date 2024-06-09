@@ -4,6 +4,8 @@ import {MatCard, MatCardContent} from "@angular/material/card";
 import {MatIcon} from "@angular/material/icon";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatTooltip} from "@angular/material/tooltip";
+import {MatSlideToggle} from "@angular/material/slide-toggle";
+import {FormsModule} from "@angular/forms";
 
 type QuestionWithVisibility = SingleQuestionPollResults & {
   isVisible: boolean,
@@ -18,7 +20,9 @@ type QuestionWithVisibility = SingleQuestionPollResults & {
     MatIcon,
     MatIconButton,
     MatTooltip,
-    MatButton
+    MatButton,
+    MatSlideToggle,
+    FormsModule
   ],
   templateUrl: './single-person-results.component.html',
   styleUrl: './single-person-results.component.css'
@@ -28,6 +32,7 @@ export class SinglePersonResultsComponent implements OnInit {
   @Output() exit = new EventEmitter<void>();
 
   protected questionsWithVisibility!: QuestionWithVisibility[]
+  protected showAnswerNames = false
 
   ngOnInit(): void {
     this.questionsWithVisibility = this.results()
