@@ -26,12 +26,12 @@ export class LobbyComponent implements OnInit{
   private cdr = inject(ChangeDetectorRef);
   private snackBar = inject(MatSnackBar);
 
-  public ip = "";
+  protected ip: string | null = null;
 
-  students = [] as Student[];
-  polls = [] as SavedPoll[];
+  students: Student[] = [];
+  polls: SavedPoll[] = [];
 
-  selectedPollId = "0";
+  selectedPollId: string | null = null;
 
   ngOnInit(): void {
     this.lobbyService.students$.subscribe(next => {
@@ -57,11 +57,7 @@ export class LobbyComponent implements OnInit{
 
 
   startGame() {
-    //TODO:
-    //- display modal
-    //- redirect to next page on accept
-    
-    if (this.selectedPollId !== "0") {
+    if (this.selectedPollId) {
       this.lobbyService.startSession().then(
         () => {
           this.router.navigate(["/", "progress"]);
