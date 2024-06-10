@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Poll, QuestionType, Student } from './model';
+import { PollAnswer, Poll, QuestionType, Student } from './model';
 import { API_URL } from '../../config';
 import { BehaviorSubject } from 'rxjs';
 
@@ -50,31 +50,15 @@ export class PollService {
 
   // TODO: implement saving answer for a single poll
   // public saveAnswers(filledPoll: FilledPoll): Promise<any> {
-  saveAnswers(): Promise<any> {
+  saveAnswers(answer: PollAnswer): Promise<any> {
     return fetch(`${API_URL}/game/fill`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({
-        "answers": [
-          {
-            "question_name": "Czy ta osoba w ogóle istnieje?",
-            "answer": "niekoniecznie"
-          },
-          {
-            "question_name": "Czy ta osoba jest miła?",
-            "answer": "całkiem milusia"
-          }
-        ],
-        "user_about": {
-          "name": "marek"
-        },
-        "user_filling": {
-          "name": "jarek"
-        }
-      })
-    })
+      body: JSON.stringify(answer)
+      }
+    )
     .then(response => {
       if (response.ok) {
         return response.text();

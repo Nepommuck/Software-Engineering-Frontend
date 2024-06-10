@@ -1,3 +1,6 @@
+/* eslint-disable camelcase */
+/* eslint-disable @typescript-eslint/camelcase */
+
 export enum QuestionType {
     TEXTBOX = 1,
     MULTIPLE_CHOICE,
@@ -10,30 +13,36 @@ export interface QuestionOption{
 }
 
 
+
+//these interface is probably invalid and/or unnecessary 
 export interface QuestionTextbox { 
     readonly isVisible: boolean;
     readonly initialValue: string;
     readonly value: string;
 }
 
+//these interface is probably invalid and/or unnecessary
 export interface Question {
     readonly type: QuestionType,
     readonly text: string;
 }
 
+//these interface is probably invalid and/or unnecessary
 export interface Answer {
-    readonly questionName: string;       //should I use camelCase to keep JS conventions, or snake_case for Python backend?
-    readonly value: QuestionTextbox | QuestionOption[];
+    readonly question_name: string;       //should I use camelCase to keep JS conventions, or snake_case for Python backend?
+    // readonly value: QuestionTextbox | QuestionOption[];
+    readonly answer: string | string[];
 }
+
+
 
 export interface User {
-    readonly name: string
+    name: string
 }
-
-export interface FilledPoll {
+export interface PollAnswer {
     readonly answers: Answer[];
-    readonly userAbout: string;
-    readonly userFilling: string;
+    readonly user_about: User;
+    readonly user_filling: User;
 }
 
 export interface QuestionMap {
