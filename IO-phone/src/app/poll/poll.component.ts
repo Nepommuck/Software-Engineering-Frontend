@@ -1,8 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { PollService } from './poll.service';
-import { Poll } from './model';
+import { Poll, Question, Student } from './model';
 import { CommonModule } from '@angular/common';
-import {MatButtonModule} from "@angular/material/button";
+import { MatButtonModule } from "@angular/material/button";
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
@@ -16,26 +16,54 @@ import { MatInputModule } from '@angular/material/input';
   templateUrl: './poll.component.html',
   styleUrl: './poll.component.css'
 })
-export class PollComponent implements OnInit {
+export class PollComponent{
   private pollService = inject(PollService);
-  protected pollTemplate: Poll;
+  pollTemplate: Poll | null = null;
+  questions: Question[] = [];
+  students: Student[] = [];
+  
+
+  currentStudentIndex = -1;
+
 
   constructor() {
-    this.pollTemplate = this.pollService.getPollTemplate();
+    this.pollService.students$.subscribe(students => {
+      this.students = students;
+      this.currentStudentIndex = 0;
+    })
+    
+    this.pollService.pollTemplate$.subscribe(template => {
+      let questions = [];
+
+      // questions must be mapped to array, or the their original order won't be preserved because of the keyvalue pipe 
+      for (let [_key, value] of Object.entries(template.questions)) {
+        questions.push(value);
+      }
+
+      this.pollTemplate = template;
+      this.questions = questions;
+    });
+
+    
+    this.pollService.fetchInfo();
   }
 
-  ngOnInit(): void {
-    //TODO SCRUM-82: fetch a poll template from server and store it
-    // this.pollService.getPollTemplate(); 
-  }
-  
+
   submitForm() {
-    this.pollService.saveAnswers()
-      .then(response => response.text())
-      .then(text => {console.log(text)})
-      .catch(error => {
-        alert("Przy zapisywaniu odpowiedzi nastąpił niespodziewany błąd!");
-        console.error(error);
-      });
+    //TODO: handle forms
+
+    this.pollService.saveAnswers().then(() => {
+      if (this.currentStudentIndex < this.students.length - 1) {
+        this.currentStudentIndex++;
+        this.clearForm();
+      } else {
+        alert("Wypelniono wszystkie ankiety!");
+        //TODO: redirect to responses
+      }
+    })
+  }
+
+  clearForm() {
+
   }
 }

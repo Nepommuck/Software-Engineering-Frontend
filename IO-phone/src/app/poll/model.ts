@@ -11,7 +11,7 @@ export interface QuestionOption{
 
 
 export interface QuestionTextbox { 
-    readonly isVisible: boolean; //I'm not sure what is it for
+    readonly isVisible: boolean;
     readonly initialValue: string;
     readonly value: string;
 }
@@ -44,4 +44,8 @@ export interface Poll {
     readonly title: string;
     readonly description: string;
     readonly questions: QuestionMap;
+}
+
+export interface Student {
+    name: string;
 }
