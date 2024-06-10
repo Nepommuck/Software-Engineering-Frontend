@@ -1,1 +1,22 @@
-<p>poll works!</p>
+<div class="poll">
+    <h2> {{pollTemplate.title}} </h2>
+    <p> {{pollTemplate.description}} </p>
+    @for (item of pollTemplate.questions | keyvalue; track item) {
+        @switch (item.value.type) {
+            @case (1) {
+                <mat-form-field>    <!-- mat-form-field must be inside the braces, or the label won't work properly -->
+                    <mat-label>{{item.value.text}}</mat-label>
+                    <textarea matInput></textarea>
+                </mat-form-field>
+            }
+            @case (2) {
+                <!-- MULTIPLE CHOICE -->
+            }
+            @case (3) {
+                <!-- SINGLE CHOICE (RADIO) -->
+            }
+        }
+    }
+
+    <button mat-raised-button class="poll__submit" (click)="submitForm()"> Prześlij odpowiedzi </button>
+</div>
