@@ -27,7 +27,7 @@ const NavBarEntries: NavBarEntry[] = [
 })
 export class NavBarComponent {
   protected readonly entries = NavBarEntries;
-  protected selectedIndex = 0;
+  protected selectedIndex?: number = undefined;
 
   constructor(private router: Router) {
     this.router.events.subscribe(event => {
@@ -41,8 +41,7 @@ export class NavBarComponent {
     const routerFoundIndex = this.entries.findIndex(entry =>
       routerUrl === entry.routerLink
     )
-    if (routerFoundIndex >= 0) {
-      this.selectedIndex = routerFoundIndex
-    }
+
+    this.selectedIndex = (routerFoundIndex >= 0) ? routerFoundIndex : undefined
   }
 }

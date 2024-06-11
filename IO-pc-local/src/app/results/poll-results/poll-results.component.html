@@ -1,0 +1,42 @@
+<h1>Wyniki ankiety</h1>
+
+@if (pollResults && !error) {
+
+  @if (selectedSinglePersonResults) {
+    <app-single-person-results [results]="selectedSinglePersonResults" (exit)="deselectSinglePerson()" />
+  }
+  @else {
+    @for (singlePersonResults of pollResults; track singlePersonResults) {
+      <mat-card class="poll-results" (click)="selectSinglePerson(singlePersonResults)">
+        <mat-card-content>
+
+          <h2>{{ singlePersonResults.personName }}</h2>
+
+          <button
+            mat-icon-button
+            (click)="selectSinglePerson(singlePersonResults)"
+            matTooltip="Zobacz odpowiedzi o tej osobie"
+          >
+            <mat-icon>search</mat-icon>
+          </button>
+
+        </mat-card-content>
+      </mat-card>
+    }
+  }
+} @else if (error) {
+  <div class="error">
+    <mat-card>
+      <mat-card-content>
+        <mat-icon color="warn">warning</mat-icon>
+        <p>Wystąpił nieoczekiwany błąd podczas pobierania wyników ankiety</p>
+      </mat-card-content>
+    </mat-card>
+
+    <button class="try-again" mat-stroked-button (click)="loadPollResults()">
+      Spróbuj ponownie
+    </button>
+  </div>
+} @else {
+  <mat-spinner />
+}

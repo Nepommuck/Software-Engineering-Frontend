@@ -1,0 +1,44 @@
+:host {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+mat-card.poll-results {
+  margin-bottom: 30px;
+  width: calc(
+    min(90%, 600px)
+  );
+
+  mat-card-content {
+    h2 {
+      margin: 0;
+    }
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+mat-card.poll-results:hover {
+  cursor: pointer;
+
+  background-color: #f6f6f6;
+}
+
+div.error {
+  display: flex;
+  flex-direction: column;
+
+  mat-card-content {
+    display: flex;
+    gap: 30px;
+  }
+
+  button.try-again {
+    align-self: end;
+    margin: 20px;
+  }
+}
+

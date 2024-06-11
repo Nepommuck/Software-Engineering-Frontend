@@ -6,6 +6,7 @@ import {SinglePollInspectorComponent} from "./polls/inspector/single-poll-inspec
 import {PollEditorComponent} from "./polls/editor/poll-editor.component";
 import {ExistingPollEditorComponent} from "./polls/editor/existing-poll-editor/existing-poll-editor.component";
 import { LobbyComponent } from './lobby/lobby.component';
+import {PollResultsComponent} from "./results/poll-results/poll-results.component";
 
 export const RoutePaths = {
   Home: "",
@@ -15,8 +16,9 @@ export const RoutePaths = {
     Edit: "polls/edit/:id",
     InspectSinglePoll: "polls/:id",
   },
-  Lobby: "lobby"
-}
+  Lobby: "lobby",
+  Results: "results",
+} as const
 
 export const routes: Routes = [
   {path: RoutePaths.Home, component: HomeViewComponent},
@@ -24,5 +26,6 @@ export const routes: Routes = [
   {path: RoutePaths.Polls.All, component: SavedPollsListComponent},
   {path: RoutePaths.Polls.InspectSinglePoll, component: SinglePollInspectorComponent},
   {path: RoutePaths.Polls.Edit, component: ExistingPollEditorComponent},
-  {path: RoutePaths.Lobby, component: LobbyComponent}
+  {path: RoutePaths.Lobby, component: LobbyComponent},
+  {path: RoutePaths.Results, component: PollResultsComponent},
 ];
