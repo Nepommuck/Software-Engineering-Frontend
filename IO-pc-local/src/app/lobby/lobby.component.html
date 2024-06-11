@@ -1,35 +1,53 @@
 <mat-card class="connection">
-    <mat-card-content>
-        Aby dołączyć wpisz w przeglądarce adres:
-        <p class="connection__highlight">
-            {{ip}}:4300
-        </p>
+  <mat-card-content>
+    @if (ip) {
+      Aby dołączyć wpisz w przeglądarce adres:
+      <p class="connection__highlight">
+        {{ ip }}:4300
+      </p>
+    } @else {
+      <p class="connection__highlight">
+        Nie udało się pobrać adresu URL.
+      </p>
+    }
 
-    </mat-card-content>
+  </mat-card-content>
 </mat-card>
 
-<button (click)="startGame()" mat-button> Rozpocznij ankietę </button>
-<button (click)="cancelGame()" mat-button color="warn"> Zakończ sesję </button>
-
-<!-- TODO Move this button into a proper place once created -->
-<button (click)="seeResults()" mat-button> Zobacz wyniki </button>
-
-<h2> Uczniowie: </h2>
-<ul>
+<div class="poll">
+  <mat-form-field class="poll__select">
+    <mat-label> Wybrana ankieta:</mat-label>
+    <mat-select [(value)]="selectedPollId" #selectedPoll>
+      @for (poll of (polls); track poll) {
+        <mat-option value="{{poll.id}}">{{ poll.name }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  <div class="poll__controls">
+    <button (click)="startGame()" mat-button> Rozpocznij ankietę</button>
+    <button (click)="cancelGame()" mat-button color="warn"> Zakończ sesję</button>
+    <!-- TODO Move this button into a proper place once created -->
+    <button (click)="seeResults()" mat-button> Zobacz wyniki</button>
+  </div>
+</div>
+<div>
+  <h2> Uczniowie: </h2>
+  <ul class="users">
     @for (student of students; track student) {
-        <li class="users">
-            <mat-card>
-                <mat-card-content class="users__card">
-                    {{student.name}}
-                    <button
-                        mat-icon-button
-                        color="primary"
-                        (click)="deleteStudent(student)"
-                    >
-                        <mat-icon>close</mat-icon>
-                    </button>
-                </mat-card-content>
-            </mat-card>
-        </li>
+      <li class="users__item">
+        <mat-card>
+          <mat-card-content class="users__card">
+            {{ student.name }}
+            <button
+              mat-icon-button
+              color="primary"
+              (click)="deleteStudent(student)"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          </mat-card-content>
+        </mat-card>
+      </li>
     }
-</ul>
+  </ul>
+</div>
