@@ -9,6 +9,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class PollService {
 
+  username: string | null = null;
   readonly students$: BehaviorSubject<Student[]> = new BehaviorSubject([{name: "marek"}, {name: "czarek"}, {name: "darek"}]);
 
   readonly pollTemplate$: BehaviorSubject<Poll> = new BehaviorSubject({
@@ -34,6 +35,17 @@ export class PollService {
       // },
     }
   } as Poll);
+
+  constructor() {
+    //ugly way to check if user was registered properly, should be moved to service
+    let username = localStorage.getItem("username");
+    if (username) {
+      this.username = username;
+    } else {
+      alert("Nie jesteś zalogowany!");
+      //redirect or throw an error instead of letting user fill the poll
+    }
+  }
 
   fetchInfo() {
     //IMPORTANT!

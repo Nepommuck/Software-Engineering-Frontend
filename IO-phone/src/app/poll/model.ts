@@ -13,27 +13,25 @@ export interface QuestionOption{
 }
 
 
-
-//these interface is probably invalid and/or unnecessary 
+//thise interface is probably invalid and/or unnecessary 
 export interface QuestionTextbox { 
     readonly isVisible: boolean;
     readonly initialValue: string;
     readonly value: string;
 }
 
-//these interface is probably invalid and/or unnecessary
+//thise interface is probably invalid and/or unnecessary
 export interface Question {
     readonly type: QuestionType,
     readonly text: string;
 }
 
-//these interface is probably invalid and/or unnecessary
+//thise interface is probably invalid and/or unnecessary
 export interface Answer {
     readonly question_name: string;       //should I use camelCase to keep JS conventions, or snake_case for Python backend?
     // readonly value: QuestionTextbox | QuestionOption[];
     readonly answer: string | string[];
 }
-
 
 
 export interface User {

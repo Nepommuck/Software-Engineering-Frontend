@@ -6,6 +6,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-poll',
@@ -20,6 +21,7 @@ import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angula
 export class PollComponent {
   private pollService = inject(PollService);
   private formBuilder = inject(FormBuilder);
+  private router = inject(Router);
 
   pollTemplate: Poll | null = null;
   questions: Question[] = [];
@@ -58,8 +60,6 @@ export class PollComponent {
 
 
   submitForm() {
-    //TODO: handle forms
-
     if (this.pollForm.valid) {
       let answers = [];
       
@@ -71,13 +71,6 @@ export class PollComponent {
           answer: this.pollForm.get(questionName)!.value
         });
       }
-      
-      // "user_about": {
-      //   "name": "marek"
-      // },
-      // "user_filling": {
-      //   "name": "jarek"
-      // }
 
 
       this.pollService.saveAnswers({
@@ -94,7 +87,9 @@ export class PollComponent {
           this.clearForm();
         } else {
           alert("Wypelniono wszystkie ankiety!");
+          
           //TODO: redirect to responses
+          this.router.navigate(["answers", this.pollService.username]);
         }
       })
     } else {
@@ -105,6 +100,10 @@ export class PollComponent {
   }
 
   clearForm() {
+      this.pollForm.reset();
+  }
 
+  get username(): string {
+    return this.username;
   }
 }

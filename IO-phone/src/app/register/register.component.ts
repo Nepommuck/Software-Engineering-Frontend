@@ -41,7 +41,9 @@ export class RegisterComponent implements OnInit {
           break;
         case LobbyEventStatus.SESSION_STARTED:
           //TODO: NAVIGATE TO NEXT PHASE
+          localStorage.setItem("username", this.model.name);
           this.router.navigate(["poll"]);
+
           break;
         case LobbyEventStatus.FAILED:
           this.isRegistered = false;
