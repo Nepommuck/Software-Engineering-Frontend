@@ -1,1 +1,27 @@
-<p>poll works!</p>
+@if (pollTemplate && students.length > 0) {
+    <form [formGroup]="pollForm" class="poll">
+        <h2> {{pollTemplate.title}} </h2>
+        <p> {{pollTemplate.description}} </p>
+        <h3> Osoba: {{students[currentStudentIndex].name}}</h3>
+        @for (question of questions; track question) {
+            @switch (question.type) {
+                @case (1) {
+                    <mat-form-field>    <!-- mat-form-field must be inside the braces, or the label won't work properly -->
+                        <mat-label>{{question.text}}</mat-label>
+                        <textarea formControlName={{question.text}} name={{question.text}} matInput></textarea>
+                    </mat-form-field>
+                }
+                @case (2) {
+                    <!-- MULTIPLE CHOICE -->
+                }
+                @case (3) {
+                    <!-- SINGLE CHOICE (RADIO) -->
+                }
+            }
+        }
+    
+        <button mat-raised-button class="poll__submit" (click)="submitForm()"> Prześlij odpowiedzi </button>
+    </form>
+} @else {
+    Oczekiwanie na odpowiedź serwera...
+}
