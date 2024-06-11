@@ -4,9 +4,13 @@
   );
 }
 
-div.top {
+div.top-row {
   display: flex;
   justify-content: space-between;
+
+  div.show-hide-buttons {
+    margin-right: 10px;
+  }
 }
 
 mat-card {
