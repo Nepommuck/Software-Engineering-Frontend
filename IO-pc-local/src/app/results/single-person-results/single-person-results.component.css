@@ -4,19 +4,13 @@
   );
 }
 
-div.top {
+div.top-row {
   display: flex;
   justify-content: space-between;
 
-  button {
-    margin-left: 10px;
+  div.show-hide-buttons {
+    margin-right: 10px;
   }
-}
-
-div.show-names-toggle {
-  display: flex;
-  justify-content: end;
-  margin-top: 10px;
 }
 
 mat-card {

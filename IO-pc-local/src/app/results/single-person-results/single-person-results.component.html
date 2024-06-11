@@ -1,7 +1,13 @@
-<div class="top">
+<div class="top-row">
   <h2>Odpowiedzi na temat: {{ results().personName }}</h2>
 
-  <div>
+  <mat-slide-toggle labelPosition="before" [(ngModel)]="showAnswerNames">
+    Pokaż autorów odpowiedzi
+  </mat-slide-toggle>
+</div>
+
+<div class="top-row">
+  <div class="show-hide-buttons">
     <button mat-stroked-button (click)="showAllQuestions()" matTooltip="Rozwiń wszystkie odpowiedzi">
       Rozwiń wszystkie
     </button>
@@ -10,12 +16,10 @@
       Schowaj wszystkie
     </button>
   </div>
-</div>
 
-<div class="show-names-toggle">
-  <mat-slide-toggle labelPosition="before" [(ngModel)]="showAnswerNames">
-    Pokaż autorów odpowiedzi
-  </mat-slide-toggle>
+  <button mat-stroked-button (click)="exit.emit()" matTooltip="Wróć do widoku pozostałych osób">
+    Wróć
+  </button>
 </div>
 
 @for (question of questionsWithVisibility; track $index) {
