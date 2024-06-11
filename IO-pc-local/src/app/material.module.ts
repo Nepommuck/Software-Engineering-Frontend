@@ -8,6 +8,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatListModule} from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
 
+import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 @NgModule({

@@ -1,12 +1,12 @@
-import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Student } from './shared/model';
-import { LobbyService } from './lobby.service';
+import {ChangeDetectorRef, Component, inject, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {Student} from './shared/model';
+import {LobbyService} from './lobby.service';
 
-import { Router } from '@angular/router';
-import { MaterialModule } from '../material.module';
-import { SavedPoll } from '../polls/model';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import {Router} from '@angular/router';
+import {MaterialModule} from '../material.module';
+import {SavedPoll} from '../polls/model';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'lobby',
@@ -20,7 +20,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 
 
-export class LobbyComponent implements OnInit{
+export class LobbyComponent implements OnInit {
   private lobbyService = inject(LobbyService);
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
@@ -72,9 +72,14 @@ export class LobbyComponent implements OnInit{
   }
 
   cancelGame() {
-    //TODO:
-    //- display modal
-    //- redirect to Home page
+    this.lobbyService.endSession().then(
+      () => {
+        this.router.navigate(["/"]);
+      }
+    ).catch(err => {
+      alert("Niespodziewany błąd: Nie udało się zakończyć sesji!");
+      console.log("error: ", err);
+    })
   }
 
   seeResults() {

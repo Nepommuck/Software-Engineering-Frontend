@@ -1,12 +1,11 @@
-import { Injectable, inject } from '@angular/core';
-import { Subject, Observable, BehaviorSubject } from 'rxjs';
-import { Student } from './shared/model';
-import { API_URL } from '../../config';
-import { PollField } from '../polls/model'; 
+import {inject, Injectable} from '@angular/core';
+import {Observable, Subject, BehaviorSubject} from 'rxjs';
+import {Student} from './shared/model';
+import {API_URL} from '../../config';
+import {PollField} from '../polls/model'; 
 
-
-import { HttpClient } from '@angular/common/http';
-import { SavedPoll } from '../polls/model';
+import {HttpClient} from '@angular/common/http';
+import {SavedPoll} from '../polls/model';
 
 
 interface GetServerIpResponse {
@@ -36,8 +35,8 @@ export class LobbyService {
 
 
   constructor() {
-    this.sse = new EventSource(`${API_URL}/game/lobby`, 
-    { withCredentials: true, });
+    this.sse = new EventSource(`${API_URL}/game/lobby`,
+      {withCredentials: true,});
 
     this.sse.onmessage = msg => {
       console.log(msg.data);
@@ -53,17 +52,37 @@ export class LobbyService {
     return this.students.asObservable();
   }
 
-  removeUser(student: Student) {
+  removeUser(student: Student): Promise<Response> {
     return fetch(`${API_URL}/user/remove/${student.name}`, {
       method: "post"
     })
   }
 
-  startSession() {
+  startSession(): Promise<Response> {
     return fetch(`${API_URL}/game/start`, {
       method: "post"
-    })
-    // .then(res => {}) //TODO: handle any errors?
-    ;
+    }).then(response => {
+      if (response.ok) {
+        return response
+      } else {
+        return response.text().then(text => {
+          throw new Error(`Failed to end session: ${text}`);
+        });
+      }
+    });
+  }
+
+  endSession(): Promise<Response> {
+    return fetch(`${API_URL}/game/end`, {
+      method: "post",
+    }).then(response => {
+      if (response.ok) {
+        return response
+      } else {
+        return response.text().then(text => {
+          throw new Error(`Failed to end session: ${text}`);
+        });
+      }
+    });
   }
 }
