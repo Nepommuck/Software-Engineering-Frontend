@@ -46,19 +46,6 @@ export class PollService {
     })
   }
 
-  fetchInfo() {
-    //IMPORTANT!
-    //.questions have to be mapped to array (and are mapped in the poll-component), or the questions' original order won't be preserved while using keyvalue pipe 
-    
-    //TODO SCRUM-82: fetch a poll template from server and store it
-    // fetch(`${API_URL}/game/data`)
-    // .then(res => {res.json()})  
-    // .then(json: {} => {
-    //     this.pollTemplate$.next({json.poll})
-    //     this.students$.next([json.students])
-    // })
-  }
-
   // TODO: implement saving answer for a single poll
   // public saveAnswers(filledPoll: FilledPoll): Promise<any> {
   saveAnswers(answer: PollAnswer): Promise<any> {

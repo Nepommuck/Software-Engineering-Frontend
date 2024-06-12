@@ -52,9 +52,6 @@ export class PollComponent {
       this.questions = questions;
 
     });
-
-    
-    this.pollService.fetchInfo();
   }
 
 
