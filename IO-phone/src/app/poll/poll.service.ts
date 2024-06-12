@@ -1,9 +1,10 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, Inject } from '@angular/core';
 import { PollAnswer, Poll, QuestionType, User } from './model';
 import { API_URL } from '../../config';
 import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { GameData } from './model';
+import { DOCUMENT } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -11,39 +12,41 @@ import { GameData } from './model';
 export class PollService {
   private httpClient = inject(HttpClient);
 
-  username: string | null = null;
-  readonly students$: BehaviorSubject<User[]> = new BehaviorSubject([{name: "marek"}, {name: "czarek"}, {name: "darek"}]);
+  private _username: string | null = null;
+  private errorOccured = false;
 
-  readonly pollTemplate$: BehaviorSubject<Poll> = new BehaviorSubject({
-    title: "Co uważasz o swoich koleżankach i kolegach?",
-    description: "Lorem ipsum",
-    questions: {
-      "Czy ta osoba w ogóle istnieje?": {
-        text: "Czy ta osoba w ogóle istnieje?",
-        type: QuestionType.TEXTBOX
-      },
-      "Czy ta osoba jest miła?": {
-        text: "Czy ta osoba jest miła?",
-        type: QuestionType.TEXTBOX
-      },
+  readonly students$: BehaviorSubject<User[]> = new BehaviorSubject([] as User[]);
+
+  readonly pollTemplate$: BehaviorSubject<Poll | null> = new BehaviorSubject(null) as BehaviorSubject<Poll | null>;
+
+  constructor(@Inject(DOCUMENT) private document: Document) {
+
+    const localStorage = document.defaultView?.localStorage;
+
+    if (localStorage) {
+      let username = localStorage.getItem("username");
+      if (username) {
+        this._username = username;
+
+        this.httpClient.get<GameData>(`${API_URL}/game/data`).subscribe(response => {
+          console.log(response);
+          this.pollTemplate$.next(response.poll)
+          this.students$.next(response.users.filter(item => item.name != username));
+        })
+      } else {
+        alert("Nie jesteś zalogowany!");
+        //redirect or throw an error instead of letting user fill the poll
+        this.errorOccured = true;
+      }
     }
-  } as Poll);
+  }
 
-  constructor() {
-    //TODO: get the username from localstorage, so student can skip the poll regarding themself 
+  get error() {
+    return this.errorOccured;
+  }
 
-    // let username = localStorage.getItem("username");
-    // if (username) {
-    //   this.username = username;
-    // } else {
-    //   alert("Nie jesteś zalogowany!");
-    //   //redirect or throw an error instead of letting user fill the poll
-    // }
-    this.httpClient.get<GameData>(`${API_URL}/game/data`).subscribe(response => {
-        console.log(response);
-        this.pollTemplate$.next(response.poll)
-        this.students$.next(response.users)
-    })
+  get username() {
+    return this._username;
   }
 
   // TODO: implement saving answer for a single poll

@@ -19,7 +19,7 @@ import { Router } from '@angular/router';
   styleUrl: './poll.component.css'
 })
 export class PollComponent {
-  private pollService = inject(PollService);
+  protected pollService = inject(PollService);
   private formBuilder = inject(FormBuilder);
   private router = inject(Router);
 
@@ -35,24 +35,31 @@ export class PollComponent {
     this.pollService.students$.subscribe(students => {
       this.students = students;
       this.currentStudentIndex = 0;
+
+      console.log(students);
     })
     
     this.pollService.pollTemplate$.subscribe(template => {
-      let questions = [];
+      if (template) {
+        let questions = [];
 
-      // questions must be mapped to array, or the their original order won't be preserved because of the keyvalue pipe 
-      for (let [_key, value] of Object.entries(template.questions)) {
-        questions.push(value);
-
-        this.pollForm.addControl(value.text, this.formBuilder.control('', [Validators.required]));
+        // questions must be mapped to array, or the their original order won't be preserved because of the keyvalue pipe 
+        for (let [key, value] of Object.entries(template.questions)) {
+          //there should be only only one place where the question text is stored, 
+          //but apparently key is better than value.text if you test it with Swagger 
+          questions.push({text: key, type: value.type});
+  
+          this.pollForm.addControl(key, this.formBuilder.control('', [Validators.required]));
+        }
+  
+        this.pollTemplate = template;
+  
+        this.questions = questions;
       }
-
-      this.pollTemplate = template;
-
-      this.questions = questions;
 
     });
   }
+  
 
 
 
@@ -73,10 +80,10 @@ export class PollComponent {
       this.pollService.saveAnswers({
         answers: answers,
         "user_about": {
-          "name": "marek"
+          "name": this.students[this.currentStudentIndex].name
         },
         "user_filling": {
-          "name": "jarek"
+          "name": this.pollService.username!
         }
       }).then(() => {
         if (this.currentStudentIndex < this.students.length - 1) {
@@ -92,6 +99,7 @@ export class PollComponent {
     } else {
       //perhaps SnackBar would be better than alert
       alert("Wartości w arkuszu są niepoprawne! Sprawdź czy udzielono odpowiedzi na wszystkie pytania.");
+      console.log("FORM:", this.pollForm);
     }
 
   }
@@ -100,7 +108,4 @@ export class PollComponent {
       this.pollForm.reset();
   }
 
-  get username(): string {
-    return this.username;
-  }
 }
