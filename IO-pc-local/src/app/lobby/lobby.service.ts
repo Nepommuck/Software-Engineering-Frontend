@@ -28,10 +28,11 @@ export class LobbyService {
   // TODO SCRUM-88: fetch poll list from server
   // public readonly polls = this.httpClient.get<SavedPoll[]>(`${API_URL}/...`)
 
-  public readonly polls = new BehaviorSubject([
-    {id: 1, name: "Jak oceniasz uczniów w swojej klasie?", fields: ([] as readonly PollField[])} as SavedPoll,
-    {id: 2, name: "Co robisz po zajęciach szkolnych?", fields: ([] as readonly PollField[])},
-  ]).asObservable();
+  // public readonly polls = new BehaviorSubject([
+  //   {id: 1, name: "Jak oceniasz uczniów w swojej klasie?", fields: ([] as readonly PollField[])} as SavedPoll,
+  //   {id: 2, name: "Co robisz po zajęciach szkolnych?", fields: ([] as readonly PollField[])},
+  // ]).asObservable();
+  public readonly polls = this.httpClient.get<string[]>(`${API_URL}/polls`);
 
 
   constructor() {
@@ -58,9 +59,10 @@ export class LobbyService {
     })
   }
 
-  startSession(): Promise<Response> {
+  startSession(pollName: string): Promise<Response> {
     return fetch(`${API_URL}/game/start`, {
-      method: "post"
+      method: "post",
+      body: pollName
     }).then(response => {
       if (response.ok) {
         return response

@@ -53,6 +53,11 @@ export interface Poll {
     readonly questions: QuestionMap;
 }
 
-export interface Student {
+export interface User {
     name: string;
+}
+
+export interface GameData {
+    users: User[];
+    poll: Poll;
 }

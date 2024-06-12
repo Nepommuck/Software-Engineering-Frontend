@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { PollService } from './poll.service';
-import { Answer, Poll, Question, Student } from './model';
+import { Answer, Poll, Question, User } from './model';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from "@angular/material/button";
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -26,7 +26,7 @@ export class PollComponent {
   pollTemplate: Poll | null = null;
   questions: Question[] = [];
 
-  students: Student[] = [];
+  students: User[] = [];
   currentStudentIndex = -1;
 
   pollForm: FormGroup = this.formBuilder.group({});

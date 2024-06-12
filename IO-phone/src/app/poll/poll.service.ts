@@ -1,16 +1,18 @@
-import { Injectable } from '@angular/core';
-import { PollAnswer, Poll, QuestionType, Student } from './model';
+import { Injectable, inject } from '@angular/core';
+import { PollAnswer, Poll, QuestionType, User } from './model';
 import { API_URL } from '../../config';
 import { BehaviorSubject } from 'rxjs';
-
+import { HttpClient } from '@angular/common/http';
+import { GameData } from './model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PollService {
+  private httpClient = inject(HttpClient);
 
   username: string | null = null;
-  readonly students$: BehaviorSubject<Student[]> = new BehaviorSubject([{name: "marek"}, {name: "czarek"}, {name: "darek"}]);
+  readonly students$: BehaviorSubject<User[]> = new BehaviorSubject([{name: "marek"}, {name: "czarek"}, {name: "darek"}]);
 
   readonly pollTemplate$: BehaviorSubject<Poll> = new BehaviorSubject({
     title: "Co uważasz o swoich koleżankach i kolegach?",
@@ -24,20 +26,12 @@ export class PollService {
         text: "Czy ta osoba jest miła?",
         type: QuestionType.TEXTBOX
       },
-      // TODO: handle different types of fields
-      // "Jak bardzo jest pomocna?": {
-      //   text: "Jak bardzo jest pomocna?",
-      //   type: QuestionType.SINGLE_CHOICE
-      // },
-      // "Które cechy z poniższych pasują do tej osoby?": {
-      //   text: "Jak bardzo jest pomocna?",
-      //   type: QuestionType.MULTIPLE_CHOICE
-      // },
     }
   } as Poll);
 
   constructor() {
-    //ugly way to check if user was registered properly, should be moved to service
+    //TODO: get the username from localstorage, so student can skip the poll regarding themself 
+
     // let username = localStorage.getItem("username");
     // if (username) {
     //   this.username = username;
@@ -45,6 +39,11 @@ export class PollService {
     //   alert("Nie jesteś zalogowany!");
     //   //redirect or throw an error instead of letting user fill the poll
     // }
+    this.httpClient.get<GameData>(`${API_URL}/game/data`).subscribe(response => {
+        console.log(response);
+        this.pollTemplate$.next(response.poll)
+        this.students$.next(response.users)
+    })
   }
 
   fetchInfo() {
@@ -52,11 +51,11 @@ export class PollService {
     //.questions have to be mapped to array (and are mapped in the poll-component), or the questions' original order won't be preserved while using keyvalue pipe 
     
     //TODO SCRUM-82: fetch a poll template from server and store it
-    // fetch(`${API_URL}/...`)
+    // fetch(`${API_URL}/game/data`)
     // .then(res => {res.json()})  
-    // .then(json => {
-    //     this.pollTemplate$.next({})
-    //     this.students$.next([])
+    // .then(json: {} => {
+    //     this.pollTemplate$.next({json.poll})
+    //     this.students$.next([json.students])
     // })
   }
 

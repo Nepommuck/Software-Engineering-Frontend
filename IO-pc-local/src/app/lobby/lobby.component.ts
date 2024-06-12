@@ -29,7 +29,7 @@ export class LobbyComponent implements OnInit {
   protected ip: string | null = null;
 
   students: Student[] = [];
-  polls: SavedPoll[] = [];
+  polls: string[] = [];
 
   selectedPollId: string | null = null;
 
@@ -58,7 +58,7 @@ export class LobbyComponent implements OnInit {
 
   startGame() {
     if (this.selectedPollId) {
-      this.lobbyService.startSession().then(
+      this.lobbyService.startSession(this.selectedPollId).then(
         () => {
           this.router.navigate(["/", "progress"]);
         }
