@@ -1,5 +1,8 @@
 {
   "name": "io-pc-local",
+  "productName": "Classroom polling app",
+  "description": "Classroom polling app",
+  "main": "electron.prod.js",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -7,7 +10,10 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:IO-pc-local": "node dist/io-pc-local/server/server.mjs"
+    "serve:ssr:IO-pc-local": "node dist/io-pc-local/server/server.mjs",
+    "electron": "electron ./electron.dev",
+    "start-electron": "concurrently \"ng serve\" \"npm run electron\"",
+    "package:win": "npm run build && cross-var electron-packager dist/io-pc-local/browser $npm_package_name-$npm_package_version --out=packages --platform=win32 --arch=all --overwrite "
   },
   "private": true,
   "dependencies": {
@@ -24,6 +30,7 @@
     "@angular/router": "^17.3.0",
     "@angular/ssr": "^17.3.5",
     "express": "^4.18.2",
+    "ng": "^0.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"
@@ -35,6 +42,10 @@
     "@types/express": "^4.17.17",
     "@types/jasmine": "~5.1.0",
     "@types/node": "^18.18.0",
+    "concurrently": "^8.2.2",
+    "cross-var": "^1.1.0",
+    "electron": "^31.0.0",
+    "electron-packager": "^17.1.2",
     "jasmine-core": "~5.1.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
