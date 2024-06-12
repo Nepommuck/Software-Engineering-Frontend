@@ -41,7 +41,6 @@ export class RegisterComponent implements OnInit {
           this.isRegistered = true;
           break;
         case LobbyEventStatus.SESSION_STARTED:
-          //TODO: NAVIGATE TO NEXT PHASE
           localStorage.setItem("username", this.model.name);
           
           this.ngZone.run(() => { //fix for the PollComponent not rendering properly on .navigate()

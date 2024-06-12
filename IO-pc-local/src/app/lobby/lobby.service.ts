@@ -25,13 +25,6 @@ export class LobbyService {
 
   private httpClient = inject(HttpClient);
   public readonly serverIp = this.httpClient.get<GetServerIpResponse>(`${API_URL}/ip`);
-  // TODO SCRUM-88: fetch poll list from server
-  // public readonly polls = this.httpClient.get<SavedPoll[]>(`${API_URL}/...`)
-
-  // public readonly polls = new BehaviorSubject([
-  //   {id: 1, name: "Jak oceniasz uczniów w swojej klasie?", fields: ([] as readonly PollField[])} as SavedPoll,
-  //   {id: 2, name: "Co robisz po zajęciach szkolnych?", fields: ([] as readonly PollField[])},
-  // ]).asObservable();
   public readonly polls = this.httpClient.get<string[]>(`${API_URL}/polls`);
 
 
