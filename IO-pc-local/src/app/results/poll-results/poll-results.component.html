@@ -1,11 +1,19 @@
-<h1>Wyniki ankiety</h1>
+<div class="top">
+  <!-- A little hack, so that the header is in the middle -->
+  <div style="width: 36px"></div>
 
-@if (pollResults && !error) {
+  <h1>Wyniki ankiety</h1>
+
+  <button mat-icon-button [disabled]="isLoading" (click)="loadPollResults()" matTooltip="Odśwież wyniki">
+    <mat-icon>refresh</mat-icon>
+  </button>
+</div>
+
+@if (pollResults) {
 
   @if (selectedSinglePersonResults) {
-    <app-single-person-results [results]="selectedSinglePersonResults" (exit)="deselectSinglePerson()" />
-  }
-  @else {
+    <app-single-person-results [results]="selectedSinglePersonResults" (exit)="deselectSinglePerson()"/>
+  } @else {
     @for (singlePersonResults of pollResults; track singlePersonResults) {
       <mat-card class="poll-results" (click)="selectSinglePerson(singlePersonResults)">
         <mat-card-content>
@@ -24,7 +32,9 @@
       </mat-card>
     }
   }
-} @else if (error) {
+} @else if (isLoading) {
+  <mat-spinner/>
+} @else {
   <div class="error">
     <mat-card>
       <mat-card-content>
@@ -37,6 +47,4 @@
       Spróbuj ponownie
     </button>
   </div>
-} @else {
-  <mat-spinner />
 }
