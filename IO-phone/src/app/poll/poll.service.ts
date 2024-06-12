@@ -38,13 +38,13 @@ export class PollService {
 
   constructor() {
     //ugly way to check if user was registered properly, should be moved to service
-    let username = localStorage.getItem("username");
-    if (username) {
-      this.username = username;
-    } else {
-      alert("Nie jesteś zalogowany!");
-      //redirect or throw an error instead of letting user fill the poll
-    }
+    // let username = localStorage.getItem("username");
+    // if (username) {
+    //   this.username = username;
+    // } else {
+    //   alert("Nie jesteś zalogowany!");
+    //   //redirect or throw an error instead of letting user fill the poll
+    // }
   }
 
   fetchInfo() {
