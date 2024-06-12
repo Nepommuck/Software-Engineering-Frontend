@@ -58,8 +58,11 @@
   </mat-card>
 }
 
-<div class="bottom">
-  <button mat-stroked-button (click)="exit.emit()" matTooltip="Wróć do widoku pozostałych osób">
-    Wróć
-  </button>
-</div>
+<!-- There is an additional "Go back" button, if there are any answers to display -->
+@if (questionsWithVisibility.length > 0) {
+  <div class="bottom">
+    <button mat-stroked-button (click)="exit.emit()" matTooltip="Wróć do widoku pozostałych osób">
+      Wróć
+    </button>
+  </div>
+}

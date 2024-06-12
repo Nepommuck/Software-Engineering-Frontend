@@ -2,6 +2,7 @@
   width: calc(
     min(90%, 1000px)
   );
+  margin-top: 20px;
 }
 
 div.top-row {
