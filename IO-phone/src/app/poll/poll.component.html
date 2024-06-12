@@ -1,4 +1,4 @@
-@if (pollTemplate && students.length > 0) {
+@if (pollTemplate && students.length > 0 && !pollService.error) {
     <form [formGroup]="pollForm" class="poll">
         <h2> {{pollTemplate.title}} </h2>
         <p> {{pollTemplate.description}} </p>
@@ -23,5 +23,9 @@
         <button mat-raised-button class="poll__submit" (click)="submitForm()"> Prześlij odpowiedzi </button>
     </form>
 } @else {
-    Oczekiwanie na odpowiedź serwera...
+    @if (pollService.error) {
+        Przy pobieraniu wystąpił błąd
+    } @else {
+        Oczekiwanie na odpowiedź serwera...
+    }
 }

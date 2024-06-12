@@ -1,63 +1,52 @@
-import { Injectable } from '@angular/core';
-import { PollAnswer, Poll, QuestionType, Student } from './model';
+import { Injectable, inject, Inject } from '@angular/core';
+import { PollAnswer, Poll, QuestionType, User } from './model';
 import { API_URL } from '../../config';
 import { BehaviorSubject } from 'rxjs';
-
+import { HttpClient } from '@angular/common/http';
+import { GameData } from './model';
+import { DOCUMENT } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PollService {
+  private httpClient = inject(HttpClient);
 
-  username: string | null = null;
-  readonly students$: BehaviorSubject<Student[]> = new BehaviorSubject([{name: "marek"}, {name: "czarek"}, {name: "darek"}]);
+  private _username: string | null = null;
+  private errorOccured = false;
 
-  readonly pollTemplate$: BehaviorSubject<Poll> = new BehaviorSubject({
-    title: "Co uważasz o swoich koleżankach i kolegach?",
-    description: "Lorem ipsum",
-    questions: {
-      "Czy ta osoba w ogóle istnieje?": {
-        text: "Czy ta osoba w ogóle istnieje?",
-        type: QuestionType.TEXTBOX
-      },
-      "Czy ta osoba jest miła?": {
-        text: "Czy ta osoba jest miła?",
-        type: QuestionType.TEXTBOX
-      },
-      // TODO: handle different types of fields
-      // "Jak bardzo jest pomocna?": {
-      //   text: "Jak bardzo jest pomocna?",
-      //   type: QuestionType.SINGLE_CHOICE
-      // },
-      // "Które cechy z poniższych pasują do tej osoby?": {
-      //   text: "Jak bardzo jest pomocna?",
-      //   type: QuestionType.MULTIPLE_CHOICE
-      // },
+  readonly students$: BehaviorSubject<User[]> = new BehaviorSubject([] as User[]);
+
+  readonly pollTemplate$: BehaviorSubject<Poll | null> = new BehaviorSubject(null) as BehaviorSubject<Poll | null>;
+
+  constructor(@Inject(DOCUMENT) private document: Document) {
+
+    const localStorage = document.defaultView?.localStorage;
+
+    if (localStorage) {
+      let username = localStorage.getItem("username");
+      if (username) {
+        this._username = username;
+
+        this.httpClient.get<GameData>(`${API_URL}/game/data`).subscribe(response => {
+          console.log(response);
+          this.pollTemplate$.next(response.poll)
+          this.students$.next(response.users.filter(item => item.name != username));
+        })
+      } else {
+        alert("Nie jesteś zalogowany!");
+        //redirect or throw an error instead of letting user fill the poll
+        this.errorOccured = true;
+      }
     }
-  } as Poll);
-
-  constructor() {
-    //ugly way to check if user was registered properly, should be moved to service
-    // let username = localStorage.getItem("username");
-    // if (username) {
-    //   this.username = username;
-    // } else {
-    //   alert("Nie jesteś zalogowany!");
-    //   //redirect or throw an error instead of letting user fill the poll
-    // }
   }
 
-  fetchInfo() {
-    //IMPORTANT!
-    //.questions have to be mapped to array (and are mapped in the poll-component), or the questions' original order won't be preserved while using keyvalue pipe 
-    
-    //TODO SCRUM-82: fetch a poll template from server and store it
-    // fetch(`${API_URL}/...`)
-    // .then(res => {res.json()})  
-    // .then(json => {
-    //     this.pollTemplate$.next({})
-    //     this.students$.next([])
-    // })
+  get error() {
+    return this.errorOccured;
+  }
+
+  get username() {
+    return this._username;
   }
 
   // TODO: implement saving answer for a single poll
