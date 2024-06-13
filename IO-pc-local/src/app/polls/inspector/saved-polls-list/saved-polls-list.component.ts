@@ -4,7 +4,7 @@ import {MatButton, MatIconButton} from "@angular/material/button";
 import {RouterLink} from "@angular/router";
 import {SavedPollsService} from "../../saved-polls.service";
 import {MatTooltip} from "@angular/material/tooltip";
-import {PollId} from "../../model";
+import {Poll} from "../../model";
 
 @Component({
   selector: 'app-saved-polls-list',
@@ -29,7 +29,7 @@ export class SavedPollsListComponent {
     })
   }
 
-  protected removePoll(pollId: PollId): void {
-    this.savedPollsService.removePoll(pollId)
+  protected removePoll(poll: Poll): void {
+    this.savedPollsService.removePoll(poll)
   }
 }

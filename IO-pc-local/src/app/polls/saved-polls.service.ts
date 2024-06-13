@@ -1,30 +1,23 @@
-import {Injectable} from '@angular/core';
+import {Injectable,inject} from '@angular/core';
 import {Poll, PollId, SavedPoll} from "./model";
 import {Observable, Subject} from "rxjs";
+import {HttpClient} from '@angular/common/http';
+import {API_URL} from '../../config';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SavedPollsService {
-  private currentPolls: SavedPoll[] = [
-    // {
-    //   id: 15,
-    //   name: "Gdzie tyś jest?",
-    //   fields: [
-    //     {id: 2, question: "eee"}
-    //   ]
-    // },
-    // {
-    //   id: 19,
-    //   name: "Eeeeeee",
-    //   fields: [
-    //     {id: 11, question: "eee"},
-    //     {id: 12, question: "eeefff"},
-    //   ]
-    // },
-  ]
-  private firstFreeId = 0
+
+  private httpClient = inject(HttpClient);
+
+  private currentPolls: SavedPoll[] = [];
+
   private pollsChanged = new Subject<SavedPoll[]>();
+
+  constructor(){
+    this.httpClient.get<SavedPoll[]>(`${API_URL}/polls`).subscribe(value => {this.currentPolls = value})
+  }
 
   get allPolls(): SavedPoll[] {
     return [...this.currentPolls]
@@ -39,33 +32,23 @@ export class SavedPollsService {
   }
 
   addPoll(newPoll: Poll): void {
-    this.currentPolls.push({
-      ...newPoll,
-      id: this.firstFreeId,
-    })
-    this.firstFreeId++
+    this.httpClient.post<any>(`${API_URL}/poll/${newPoll.name}/save`,newPoll).subscribe(response => {})
     this.emitChange()
   }
 
   updateExistingPoll(pollId: PollId, newValue: Poll): void {
-    this.currentPolls = this.currentPolls.map(poll => {
-      if (poll.id !== pollId) {
-        return poll
-      } else {
-        return {id: pollId, ...newValue}
-      }
-    })
+    this.httpClient.delete<any>(`${API_URL}/poll/${newValue.name}`).subscribe(response => {})
+    this.addPoll(newValue)
     this.emitChange()
   }
 
-  removePoll(pollId: PollId): void {
-    this.currentPolls = this.currentPolls.filter(poll =>
-      poll.id !== pollId
-    )
+  removePoll(poll: Poll): void {
+    this.httpClient.delete<any>(`${API_URL}/poll/${poll.name}`).subscribe(response => {})
     this.emitChange()
   }
 
   private emitChange(): void {
-    this.pollsChanged.next([...this.currentPolls]);
+    this.httpClient.get<SavedPoll[]>(`${API_URL}/polls`).subscribe(value => {this.currentPolls = value})
+    //this.pollsChanged.next([...this.currentPolls]);
   }
 }

@@ -1,17 +1,21 @@
-<h4>Liczba zapisanych ankiet: {{ savedPolls.length }} </h4>
+<h4>Liczba zapisanych ankiet: {{ savedPolls.length }}</h4>
 
 <div class="polls">
   @for (poll of savedPolls; track $index) {
-    <p> {{ ($index + 1) + ". " + poll.name }} </p>
+  <p>{{ $index + 1 + ". " + poll.name }}</p>
 
-    <button mat-icon-button [routerLink]="'' + poll.id" matTooltip="Zobacz ankietę">
-      <mat-icon>search</mat-icon>
-    </button>
-    <button mat-icon-button [routerLink]="'edit/' + poll.id" matTooltip="Edytuj">
-      <mat-icon>edit</mat-icon>
-    </button>
-    <button mat-icon-button (click)="removePoll(poll.id)" matTooltip="Usuń ankietę">
-      <mat-icon>delete</mat-icon>
-    </button>
+  <button
+    mat-icon-button
+    [routerLink]="'' + poll.id"
+    matTooltip="Zobacz ankietę"
+  >
+    <mat-icon>search</mat-icon>
+  </button>
+  <button mat-icon-button [routerLink]="'edit/' + poll.id" matTooltip="Edytuj">
+    <mat-icon>edit</mat-icon>
+  </button>
+  <button mat-icon-button (click)="removePoll(poll)" matTooltip="Usuń ankietę">
+    <mat-icon>delete</mat-icon>
+  </button>
   }
 </div>
