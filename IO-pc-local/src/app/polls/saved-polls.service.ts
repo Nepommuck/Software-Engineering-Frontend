@@ -37,13 +37,13 @@ export class SavedPollsService {
   }
 
   updateExistingPoll(pollId: PollId, newValue: Poll): void {
-    this.httpClient.delete<any>(`${API_URL}/poll/${newValue.name}`)
+    this.httpClient.delete<any>(`${API_URL}/poll/${newValue.name}`).subscribe(response => {})
     this.addPoll(newValue)
     this.emitChange()
   }
 
   removePoll(poll: Poll): void {
-    this.httpClient.delete<any>(`${API_URL}/poll/${poll.name}`)
+    this.httpClient.delete<any>(`${API_URL}/poll/${poll.name}`).subscribe(response => {})
     this.emitChange()
   }
 
