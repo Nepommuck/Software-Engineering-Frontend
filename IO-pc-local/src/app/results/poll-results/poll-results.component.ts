@@ -8,6 +8,8 @@ import {MatIcon} from "@angular/material/icon";
 import {MatTooltip} from "@angular/material/tooltip";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 
+const POLL_RESULTS_AUTO_RELOAD_TIMEOUT = 5_000
+
 @Component({
   selector: 'app-poll-results',
   standalone: true,
@@ -28,11 +30,12 @@ export class PollResultsComponent implements OnInit {
   private readonly pollResultsService = inject(PollResultsService)
 
   protected pollResults?: PollResults = undefined
-  protected error = false
+  protected isLoading = true
   protected selectedSinglePersonResults?: SinglePersonPollResults = undefined
 
   ngOnInit(): void {
     this.loadPollResults()
+    this.setPollResultsAutoReload(POLL_RESULTS_AUTO_RELOAD_TIMEOUT)
   }
 
   protected selectSinglePerson(results: SinglePersonPollResults): void {
@@ -44,16 +47,34 @@ export class PollResultsComponent implements OnInit {
   }
 
   protected loadPollResults(): void {
-    this.error = false
-    this.pollResults = undefined
+    this.isLoading = true
 
-      this.pollResultsService.pollResults.then(results => {
-          this.error = false
-          this.pollResults = results
+    this.pollResultsService.pollResults.then(results => {
+        this.isLoading = false
+        this.pollResults = results
+
+        // Update selected person results if possible
+        const selectedPersonName = this.selectedSinglePersonResults?.personName
+        if (selectedPersonName) {
+          const updatedSinglePersonResults = results
+            .find(singlePersonResults => singlePersonResults.personName == selectedPersonName)
+
+          if (updatedSinglePersonResults) {
+            this.selectedSinglePersonResults = updatedSinglePersonResults
+          }
         }
-      ).catch(() => {
-          this.error = true
-        }
-      )
+      }
+    ).catch(() => {
+        this.isLoading = false
+        this.pollResults = undefined
+      }
+    )
+  }
+
+  private setPollResultsAutoReload(timeoutMs: number) {
+    setTimeout(() => {
+      this.loadPollResults()
+      this.setPollResultsAutoReload(timeoutMs)
+    }, timeoutMs)
   }
 }

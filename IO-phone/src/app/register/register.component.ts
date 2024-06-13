@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, NgZone, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -27,6 +27,7 @@ export class RegisterComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly changeDetector = inject(ChangeDetectorRef);
   private readonly registerService = inject(RegisterService);
+  private readonly ngZone = inject(NgZone);
 
   isRegistered: boolean = false;
   model: RegistrationFormValue = {
@@ -40,8 +41,11 @@ export class RegisterComponent implements OnInit {
           this.isRegistered = true;
           break;
         case LobbyEventStatus.SESSION_STARTED:
-          //TODO: NAVIGATE TO NEXT PHASE
-          this.router.navigate(["poll"]);
+          localStorage.setItem("username", this.model.name);
+          
+          this.ngZone.run(() => { //fix for the PollComponent not rendering properly on .navigate()
+            this.router.navigate(["poll"]);
+          })
           break;
         case LobbyEventStatus.FAILED:
           this.isRegistered = false;
