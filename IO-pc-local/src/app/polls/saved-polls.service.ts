@@ -32,7 +32,7 @@ export class SavedPollsService {
   }
 
   addPoll(newPoll: Poll): void {
-    this.httpClient.post<any>(`${API_URL}/poll/${newPoll.name}/save`,newPoll)
+    this.httpClient.post<any>(`${API_URL}/poll/${newPoll.name}/save`,newPoll).subscribe(response => {})
     this.emitChange()
   }
 
