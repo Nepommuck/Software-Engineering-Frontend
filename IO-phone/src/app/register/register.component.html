@@ -1,15 +1,42 @@
 <div class="register">
-    @if(!isRegistered) {
-        <h2> Dołącz do sesji </h2>
-        <form #userForm="ngForm" class="register" (submit)="submitForm()">
-            <mat-form-field appearance="outline">
-                <mat-label>Podaj swoje imię i nazwisko</mat-label>
-                <input matInput name="name" [(ngModel)]="model.name" type="text" minlength="2" required class="register" placeholder="Jan Kowalski"/>
-            </mat-form-field>
-    
-            <button [disabled]="!userForm.valid" mat-button class="register"> Dołącz </button>
-       </form>
-    } @else {
-        <h3 style="text-align: center;">Oczekiwanie na rozpoczęcie sesji...</h3>
-    }
+  @if(!isRegistered) {
+  <h2
+    style="
+      background-color: #ffffff;
+      border-radius: 10px;
+      text-align: center;
+      padding: 20px 40px; /* Increase padding to make it look more like a banner */
+      display: block;
+      font-size: 1.5em;
+      font-weight: normal;
+      margin-top: 20px; /* Adds margin from the top */
+      border: 2px solid #000000; /* Adds a 2px wide border */
+      width: 100%; /* Makes it span the full width */
+      box-sizing: border-box; /* Ensures padding and border are included in the width */
+    "
+  >
+    Dołącz do sesji
+  </h2>
+  <form #userForm="ngForm" class="register" (submit)="submitForm()">
+    <mat-form-field appearance="outline">
+      <mat-label>Podaj swoje imię i nazwisko</mat-label>
+      <input
+        matInput
+        name="name"
+        [(ngModel)]="model.name"
+        type="text"
+        minlength="2"
+        required
+        class="register"
+        placeholder="Jan Kowalski"
+      />
+    </mat-form-field>
+
+    <button [disabled]="!userForm.valid" mat-button class="register">
+      Dołącz
+    </button>
+  </form>
+  } @else {
+  <h3 style="text-align: center">Oczekiwanie na rozpoczęcie sesji...</h3>
+  }
 </div>
